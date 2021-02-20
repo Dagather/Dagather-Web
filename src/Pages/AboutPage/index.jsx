@@ -2,15 +2,15 @@ import React from 'react';
 
 import NavBar from 'Components/NavBar';
 
-function Mainpage() {
+function AboutPage() {
   return (
     <>
       <NavBar />
-      <div className="mainPage">
-        Hello This is Mainpage
+      <div className="aboutPage">
+        Hello This is AboutPage
       </div>
     </>
   );
 }
 
-export default Mainpage;
+export default AboutPage;

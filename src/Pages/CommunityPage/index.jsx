@@ -2,15 +2,15 @@ import React from 'react';
 
 import NavBar from 'Components/NavBar';
 
-function Mainpage() {
+function CommunityPage() {
   return (
     <>
       <NavBar />
-      <div className="mainPage">
-        Hello This is Mainpage
+      <div className="communityPage">
+        Hello This is CommunityPage
       </div>
     </>
   );
 }
 
-export default Mainpage;
+export default CommunityPage;
