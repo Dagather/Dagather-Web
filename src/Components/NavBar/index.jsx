@@ -1,11 +1,57 @@
 import React from 'react';
 
-function NavBar() {
+import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
+import {
+  Nav,
+  Navbar,
+  NavItem,
+  NavLink,
+  Collapse,
+  NavbarBrand,
+} from 'reactstrap';
+
+import pageNames from 'Constants/page-names';
+import logo from 'Assets/img/logo/logo.png';
+
+function NavBar(props) {
+  // const [isOpen, setIsOpen] = useState(false);
+  // const toggle = () => {
+  //   setIsOpen(!isOpen);
+  // };
+  const navigatePage = (pageName) => {
+    // const history = useHistory();
+    const { history } = props;
+    history.push({ pathname: `/${pageName}` });
+  };
+
+  const getNavLink = () => pageNames.map((pageName) => (
+    <NavItem className="navBar__container__col__routeTab__navItem" key={pageName.name}>
+      <NavLink className="navBar__container__col__routeTab__navItem__navLink" onClick={() => navigatePage(pageName.link)}>
+        {pageName.name}
+      </NavLink>
+    </NavItem>
+  ));
+
   return (
-    <div className="navBar">
-      this is NavBar Component.
-    </div>
+    <Navbar className="navBar" light expand="md">
+      <div className="navBar__container">
+        <NavbarBrand className="navBar__container__home" href="/">
+          <img src={logo} alt="dagather" />
+        </NavbarBrand>
+        <Collapse className="navBar__container__col" isOpen={false} navbar>
+          <Nav className="navBar__container__col__routeTab" navbar>
+            {getNavLink()}
+          </Nav>
+        </Collapse>
+      </div>
+    </Navbar>
   );
 }
 
-export default NavBar;
+NavBar.propTypes = {
+  history: ReactRouterPropTypes.history.isRequired,
+};
+
+export default withRouter(NavBar);

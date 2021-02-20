@@ -1,0 +1,36 @@
+.navBar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1001;
+  background-color: $navbar-color;
+  @include centerize();
+
+  &__container {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    &__home {
+      color: white;
+      @include montserrat('bold');
+    }
+
+    &__col {
+      &__routeTab {
+        display: flex;
+        &__navItem {
+          display: flex;
+          margin: 0 1rem;
+          &__navLink {
+            @include montserrat('light');
+            cursor: pointer;
+            color: white;
+            &:hover {
+              color: black;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,10 +1,15 @@
 import React from 'react';
 
+import NavBar from 'Components/NavBar';
+
 function Mainpage() {
   return (
-    <div className="mainPage">
-      Hello This is Mainpage
-    </div>
+    <>
+      <NavBar />
+      <div className="mainPage">
+        Hello This is Mainpage
+      </div>
+    </>
   );
 }
 
