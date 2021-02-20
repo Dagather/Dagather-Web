@@ -1,0 +1,15 @@
+@mixin montserrat($weight) {
+  @if $weight == 'bold' {
+    font-family: 'MontserratBold';
+  } @else if $weight == 'light' {
+    font-family: 'MontserratLight';
+  } @else {
+    font-family: 'MontserratMedium';
+  }
+}
+
+@mixin centerize() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

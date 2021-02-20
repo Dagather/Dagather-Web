@@ -1,3 +1,24 @@
+//  Constants
+@import 'Constants/colors.scss';
+@import 'Constants/style-macro.scss';
+
+// Component
+@import 'Components/NavBar/index.scss';
+
+// Font
+@font-face {
+  font-family: 'MontserratBold';
+  src: url('Assets/Fonts/Montserrat/Montserrat-Bold.ttf');
+}
+@font-face {
+  font-family: 'MontserratMedium';
+  src: url('Assets/Fonts/Montserrat/Montserrat-Medium.ttf');
+}
+@font-face {
+  font-family: 'MontserratLight';
+  src: url('Assets/Fonts/Montserrat/Montserrat-Light.ttf');
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
