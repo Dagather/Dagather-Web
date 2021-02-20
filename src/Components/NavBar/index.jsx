@@ -14,14 +14,10 @@ import {
 
 import pageNames from 'Constants/page-names';
 import logo from 'Assets/img/logo/logo.png';
+import searchImg from 'Assets/img/icon/search.svg';
 
 function NavBar(props) {
-  // const [isOpen, setIsOpen] = useState(false);
-  // const toggle = () => {
-  //   setIsOpen(!isOpen);
-  // };
   const navigatePage = (pageName) => {
-    // const history = useHistory();
     const { history } = props;
     history.push({ pathname: `/${pageName}` });
   };
@@ -29,7 +25,7 @@ function NavBar(props) {
   const getNavLink = () => pageNames.map((pageName) => (
     <NavItem className="navBar__container__col__routeTab__navItem" key={pageName.name}>
       <NavLink className="navBar__container__col__routeTab__navItem__navLink" onClick={() => navigatePage(pageName.link)}>
-        {pageName.name}
+        {pageName.name === 'Search' ? <img src={searchImg} alt="searchImg" /> : pageName.name}
       </NavLink>
     </NavItem>
   ));
