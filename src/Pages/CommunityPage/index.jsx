@@ -1,10 +1,15 @@
 import React from 'react';
 
+import NavBar from 'Components/NavBar';
+
 function CommunityPage() {
   return (
-    <div className="communityPage">
-      Hello This is CommunityPage
-    </div>
+    <>
+      <NavBar />
+      <div className="communityPage">
+        Hello This is CommunityPage
+      </div>
+    </>
   );
 }
 

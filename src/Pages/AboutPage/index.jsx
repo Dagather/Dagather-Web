@@ -1,10 +1,15 @@
 import React from 'react';
 
+import NavBar from 'Components/NavBar';
+
 function AboutPage() {
   return (
-    <div className="aboutPage">
-      Hello This is AboutPage
-    </div>
+    <>
+      <NavBar />
+      <div className="aboutPage">
+        Hello This is AboutPage
+      </div>
+    </>
   );
 }
 
