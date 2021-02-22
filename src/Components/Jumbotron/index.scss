@@ -1,12 +1,14 @@
 .jumbotron {
+  position: relative;
   margin-top: 30px;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: space-around;
   &__img {
-    position: relative;
-    overflow: hidden;
+    & img {
+      max-height: 300px;
+    }
   }
   &__text {
     position: absolute;

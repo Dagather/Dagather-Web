@@ -8,6 +8,14 @@
   }
 }
 
+@mixin ibmSans($weight) {
+  @if $weight == 'bold' {
+    font-family: 'IBMPlexSansKR-Bold';
+  } @else {
+    font-family: 'IBMPlexSansKR-Regular';
+  }
+}
+
 @mixin centerize() {
   display: flex;
   align-items: center;
