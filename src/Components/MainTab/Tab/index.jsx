@@ -2,22 +2,21 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-function MainTab(props) {
+function Tab(props) {
   const { children, title } = props;
   return (
-    <div className="mainTab">
-      <div className="mainTab__header">
+    <div className="tab">
+      <div className="tab__header">
         {title}
       </div>
-      <hr />
-      <div className="mainTab__content">
+      <div className="tab__content">
         {children}
       </div>
     </div>
   );
 }
 
-MainTab.propTypes = {
+Tab.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -26,9 +25,9 @@ MainTab.propTypes = {
   title: PropTypes.string,
 };
 
-MainTab.defaultProps = {
+Tab.defaultProps = {
   children: null,
   title: '',
 };
 
-export default MainTab;
+export default Tab;

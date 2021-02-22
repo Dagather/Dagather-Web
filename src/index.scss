@@ -7,6 +7,7 @@
 @import 'Components/Jumbotron/index.scss';
 @import 'Components/Button/index.scss';
 @import 'Components/MainTab/index.scss';
+@import 'Components/MainTab/Tab/index.scss';
 
 // Page
 @import 'Pages/MainPage/index.scss';
@@ -46,8 +47,17 @@
   .container {
     width: 60%;
   }
-  .jumbotron__text {
-    left: 20%;
+
+  .jumbotron {
+    &__text {
+      left: 20%;
+    }
+
+    &__img {
+      & img {
+        max-height: none;
+      }
+    }
   }
 }
 
@@ -55,6 +65,10 @@ html,
 body,
 #root {
   height: 100%;
+  overflow-x: hidden;
+  @media screen and (max-width: '1360px') {
+    font-size: 0.9rem;
+  }
 }
 
 body {

@@ -1,0 +1,22 @@
+.tab {
+  @include centerize();
+  flex-direction: column;
+  justify-content: space-between;
+  &__header {
+    @include montserrat('bold');
+    font-size: 3rem;
+  }
+  &__content {
+    margin-top: 1rem;
+    width: 80%;
+    @include ibmSans('');
+  }
+}
+
+@media screen and (max-width: '1360px') {
+  .tab {
+    &__content {
+      width: 60%;
+    }
+  }
+}
