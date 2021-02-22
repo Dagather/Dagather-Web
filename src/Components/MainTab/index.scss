@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin-bottom: 10%;
   & hr,
   &__header {
     margin-left: 5%;
@@ -10,8 +11,8 @@
     margin-inline-end: 0;
     margin-inline-start: 5%;
     width: 20%;
-    border: 1.5px solid #4dbfbf;
-    background-color: #4dbfbf;
+    border: 1.5px solid $mainTab-color;
+    background-color: $mainTab-color;
   }
   &__header {
     @include ibmSans('bold');
@@ -21,6 +22,6 @@
     margin-top: 5%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 }
