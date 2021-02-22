@@ -14,7 +14,6 @@
     color: white;
     display: flex;
     flex-direction: column;
-
     &__title {
       @include montserrat('bold');
       font-size: 2.5rem;
@@ -23,6 +22,9 @@
     &__desc {
       @include montserrat('light');
       font-size: 1.5rem;
+    }
+    &__btn {
+      margin-top: 3rem;
     }
   }
 }

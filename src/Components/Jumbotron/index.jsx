@@ -2,7 +2,7 @@ import React from 'react';
 
 import background from 'Assets/img/background/workingPeople.jpg';
 
-import { Button } from 'reactstrap';
+import Button from 'Components/Button';
 
 function Jumbotron() {
   return (
@@ -17,8 +17,8 @@ function Jumbotron() {
         <div className="jumbotron__text__desc">
           Just Order and Drink Coffee.
         </div>
-        <div className="jumbotron__text_btn">
-          <Button>Get Started</Button>
+        <div className="jumbotron__text__btn">
+          <Button>Connect UiPath &nbsp;&nbsp; &gt;</Button>
         </div>
       </div>
     </div>
