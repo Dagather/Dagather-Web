@@ -6,6 +6,7 @@
 @import 'Components/NavBar/index.scss';
 @import 'Components/Jumbotron/index.scss';
 @import 'Components/Button/index.scss';
+@import 'Components/MainTab/index.scss';
 
 // Page
 @import 'Pages/MainPage/index.scss';
@@ -22,6 +23,14 @@
 @font-face {
   font-family: 'MontserratLight';
   src: url('Assets/Fonts/Montserrat/Montserrat-Light.ttf');
+}
+
+@font-face {
+  font-family: 'IBMPlexSansKR-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @media screen and (min-width: '1360px') {
