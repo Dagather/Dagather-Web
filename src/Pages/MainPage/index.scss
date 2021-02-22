@@ -1,0 +1,9 @@
+.container {
+  @include centerize();
+  margin: auto;
+  .mainPage {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}

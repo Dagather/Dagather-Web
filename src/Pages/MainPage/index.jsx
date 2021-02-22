@@ -1,13 +1,16 @@
 import React from 'react';
 
 import NavBar from 'Components/NavBar';
+import Jumbotron from 'Components/Jumbotron';
 
 function Mainpage() {
   return (
     <>
       <NavBar />
-      <div className="mainPage">
-        Hello This is Mainpage
+      <Jumbotron />
+      <div className="container">
+
+        <div className="mainPage" />
       </div>
     </>
   );

@@ -1,0 +1,28 @@
+.jumbotron {
+  margin-top: 30px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &__img {
+    position: relative;
+    overflow: hidden;
+  }
+  &__text {
+    position: absolute;
+    left: 5%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      @include montserrat('bold');
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
+    &__desc {
+      @include montserrat('light');
+      font-size: 1.5rem;
+    }
+  }
+}

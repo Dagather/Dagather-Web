@@ -4,6 +4,10 @@
 
 // Component
 @import 'Components/NavBar/index.scss';
+@import 'Components/Jumbotron/index.scss';
+
+// Page
+@import 'Pages/MainPage/index.scss';
 
 // Font
 @font-face {
@@ -17,6 +21,16 @@
 @font-face {
   font-family: 'MontserratLight';
   src: url('Assets/Fonts/Montserrat/Montserrat-Light.ttf');
+}
+
+@media screen and (min-width: '1360px') {
+  .navBar__container,
+  .container {
+    width: 60%;
+  }
+  .jumbotron__text {
+    left: 20%;
+  }
 }
 
 html,
