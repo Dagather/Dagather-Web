@@ -1,14 +1,23 @@
 .tab {
   @include centerize();
   flex-direction: column;
-  justify-content: space-between;
-  &__header {
+  &__title {
     @include montserrat('bold');
     font-size: 3rem;
+  }
+  &__subTitle {
+    @include montserrat('medium');
+    font-size: 1.4rem;
+    & hr {
+      width: inherit;
+      border-color: $tab-color;
+      background-color: $tab-color;
+    }
   }
   &__content {
     margin-top: 1rem;
     width: 80%;
+    font-size: 1.2rem;
     @include ibmSans('');
   }
 }

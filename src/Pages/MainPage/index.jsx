@@ -10,8 +10,8 @@ import introduceText from 'Constants/introduce-text';
 function Mainpage() {
   const getTab = () => (
     introduceText.map((text, index) => (
-      <Tab key={text} title={(index + 1).toString()}>
-        {text}
+      <Tab key={text[1]} title={(index + 1).toString()} subTitle={text[1]}>
+        {text[0]}
       </Tab>
     ))
   );
@@ -24,6 +24,9 @@ function Mainpage() {
         <div className="mainPage">
           <MainTab title="서비스 소개">
             {getTab()}
+          </MainTab>
+          <MainTab title="RPA란?">
+            testing
           </MainTab>
         </div>
       </div>
