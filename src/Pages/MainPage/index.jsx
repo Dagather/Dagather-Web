@@ -9,7 +9,6 @@ function Mainpage() {
       <NavBar />
       <Jumbotron />
       <div className="container">
-
         <div className="mainPage" />
       </div>
     </>

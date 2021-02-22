@@ -1,8 +1,10 @@
 import React from 'react';
 
-import background from 'Assets/img/background/workingPeople.jpg';
+import uiPathConfig from 'Config/uipathConfig';
 
 import Button from 'Components/Button';
+
+import background from 'Assets/img/background/workingPeople.jpg';
 
 function Jumbotron() {
   return (
@@ -18,7 +20,7 @@ function Jumbotron() {
           Just Order and Drink Coffee.
         </div>
         <div className="jumbotron__text__btn">
-          <Button>Connect UiPath &nbsp;&nbsp; &gt;</Button>
+          <Button onClick={uiPathConfig}>Connect UiPath &nbsp;&nbsp; &gt;</Button>
         </div>
       </div>
     </div>

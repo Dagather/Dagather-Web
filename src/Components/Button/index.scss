@@ -7,6 +7,7 @@
   border-radius: 3px;
   &__text {
     @include montserrat('bold');
+    font-size: 1rem;
   }
 
   &:hover {
