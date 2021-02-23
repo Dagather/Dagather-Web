@@ -11,6 +11,8 @@
 @mixin ibmSans($weight) {
   @if $weight == 'bold' {
     font-family: 'IBMPlexSansKR-Bold';
+  } @else if $weight == 'light' {
+    font-family: 'IBMPlexSansKR-Light';
   } @else {
     font-family: 'IBMPlexSansKR-Regular';
   }
