@@ -1,6 +1,3 @@
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable no-unused-vars */
-
 import React from 'react';
 
 import NavBar from 'Components/NavBar';
@@ -11,17 +8,24 @@ import uipathlogo from 'Assets/img/logo/uipath-logo.jpeg';
 import aboutpageText from 'Constants/aboutpage-text';
 
 function AboutPage() {
-  const getText = () =>
-    aboutpageText.map((text) => <Tab key={text[0]}>{text[0]}</Tab>);
+  const uiPathImage = <img src={uipathlogo} alt={uipathlogo} />;
+  const getText = () => (
+    aboutpageText.map((text, index) => (
+      <Tab title={!index && uiPathImage} key={text[0]}>
+        <>
+          {text[0]}
+        </>
+      </Tab>
+    )));
 
   return (
     <>
       <NavBar />
       <div className="container">
         <div className="aboutPage">
-          <MainTab title="프로젝트 개요" />
-          <img src={uipathlogo} alt={uipathlogo} />
-          {getText()}
+          <MainTab title="프로젝트 개요">
+            {getText()}
+          </MainTab>
           <MainTab title="구성원" />
           <MainTab title="기술 스택" />
         </div>
