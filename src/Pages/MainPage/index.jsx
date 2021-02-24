@@ -6,6 +6,7 @@ import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import MainTab from 'Components/MainTab';
 import Tab from 'Components/MainTab/Tab';
+import Footer from 'Components/Footer';
 
 import uiPathConfig from 'Config/uipathConfig';
 
@@ -68,6 +69,7 @@ function Mainpage() {
         onClick={() => history.push({ pathname: '/robot' })}
         buttonName="Getting Started"
       />
+      <Footer />
     </>
   );
 }
