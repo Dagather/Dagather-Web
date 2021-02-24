@@ -57,6 +57,7 @@ function Mainpage() {
           <MainTab title="서비스 소개">
             {getServiceTab()}
           </MainTab>
+          <hr />
           <MainTab title="RPA란?">
             {getRPATab()}
           </MainTab>

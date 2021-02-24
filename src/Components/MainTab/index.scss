@@ -2,19 +2,18 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20%;
-  & hr,
-  &__header {
-    margin-left: 5%;
-  }
+  margin: 7.5% 0;
+
   & hr {
     margin-inline-end: 0;
     margin-inline-start: 5%;
+    margin: auto;
     width: 20%;
     border: 1.5px solid $mainTab-color;
     background-color: $mainTab-color;
   }
   &__header {
+    @include centerize();
     @include ibmSans('bold');
     font-size: 2rem;
   }
