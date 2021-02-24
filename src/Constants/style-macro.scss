@@ -23,3 +23,14 @@
   align-items: center;
   justify-content: center;
 }
+
+@mixin nakedButton() {
+  background-color: transparent;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+  &:focus {
+    outline: none;
+  }
+}
