@@ -10,8 +10,7 @@ import MainTab from 'Components/MainTab';
 import tableBg from 'Assets/img/background/table.jpg';
 
 function RobotPage() {
-  // () => selectCard(tmpTitle)
-  const [selectedCard, selectCard] = useState('');
+  const [selectedCard, selectCard] = useState('로봇에 대한 설명이 나타납니다.');
   const tmpArray = ['1. 커피셔틀', '2. 문서정리셔틀', '3. 날씨수집셔틀', '4. 회의자료정리셔틀',
     '5. 영수증정리셔틀', '6. 최저가수집셔틀', '7. 주식정보수집셔틀', '8. 기타 잡 셔틀',
     '9. 실험용', '10. 동규밥주기'];
