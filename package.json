@@ -9,6 +9,7 @@
     "@uipath/robot": "1.2.0",
     "firebase": "8.2.6",
     "node-sass": "5.0.0",
+    "prop-types": "15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "5.2.0",

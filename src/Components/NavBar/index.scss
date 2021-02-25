@@ -10,6 +10,7 @@
     width: 90%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     &__home {
       color: white;
       @include montserrat('bold');
@@ -22,6 +23,8 @@
           display: flex;
           margin: 0 1rem;
           &__navLink {
+            display: flex;
+            align-items: center;
             @include montserrat('light');
             cursor: pointer;
             color: white;

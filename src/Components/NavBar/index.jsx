@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { withRouter } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import { useHistory } from 'react-router-dom';
 
 import {
   Nav,
   Navbar,
   NavItem,
   NavLink,
-  Collapse,
   NavbarBrand,
 } from 'reactstrap';
 
@@ -16,9 +14,10 @@ import pageNames from 'Constants/page-names';
 import logo from 'Assets/img/logo/logo.png';
 import searchImg from 'Assets/img/icon/search.svg';
 
-function NavBar(props) {
+function NavBar() {
+  const history = useHistory();
+
   const navigatePage = (pageName) => {
-    const { history } = props;
     history.push({ pathname: `/${pageName}` });
   };
 
@@ -36,18 +35,12 @@ function NavBar(props) {
         <NavbarBrand className="navBar__container__home" href="/">
           <img src={logo} alt="dagather" />
         </NavbarBrand>
-        <Collapse className="navBar__container__col" isOpen={false} navbar>
-          <Nav className="navBar__container__col__routeTab" navbar>
-            {getNavLink()}
-          </Nav>
-        </Collapse>
+        <Nav className="navBar__container__col__routeTab" navbar>
+          {getNavLink()}
+        </Nav>
       </div>
     </Navbar>
   );
 }
 
-NavBar.propTypes = {
-  history: ReactRouterPropTypes.history.isRequired,
-};
-
-export default withRouter(NavBar);
+export default NavBar;

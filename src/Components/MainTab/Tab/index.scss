@@ -1,0 +1,37 @@
+.tab {
+  @include centerize();
+  flex-direction: column;
+  &__title {
+    @include montserrat('bold');
+    font-size: 3rem;
+    & img {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 5px;
+    }
+  }
+  &__subTitle {
+    @include ibmSans('');
+    font-size: 1.4rem;
+    font-weight: bolder;
+    & hr {
+      width: inherit;
+      border-color: $tab-color;
+      background-color: $tab-color;
+    }
+  }
+  &__content {
+    margin-top: 1rem;
+    width: 80%;
+    font-size: 1.2rem;
+    @include ibmSans('light');
+  }
+}
+
+@media screen and (max-width: '1360px') {
+  .tab {
+    &__content {
+      width: 60%;
+    }
+  }
+}

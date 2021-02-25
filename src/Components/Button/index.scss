@@ -1,0 +1,31 @@
+.customButton {
+  background-color: $navbar-color;
+  color: white;
+  padding: 1rem;
+  border-style: none;
+  border: 1px solid $navbar-color;
+  border-radius: 3px;
+  &__text {
+    @include montserrat('bold');
+    font-size: 1rem;
+  }
+
+  &:hover {
+    cursor: pointer;
+    animation: buttonHover 0.3s ease;
+    animation-fill-mode: forwards;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@keyframes buttonHover {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}

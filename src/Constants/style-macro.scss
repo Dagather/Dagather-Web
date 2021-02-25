@@ -8,8 +8,29 @@
   }
 }
 
+@mixin ibmSans($weight) {
+  @if $weight == 'bold' {
+    font-family: 'IBMPlexSansKR-Bold';
+  } @else if $weight == 'light' {
+    font-family: 'IBMPlexSansKR-Light';
+  } @else {
+    font-family: 'IBMPlexSansKR-Regular';
+  }
+}
+
 @mixin centerize() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@mixin nakedButton() {
+  background-color: transparent;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+  &:focus {
+    outline: none;
+  }
 }

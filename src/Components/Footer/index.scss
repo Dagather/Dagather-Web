@@ -1,0 +1,35 @@
+.footer {
+  margin-top: 5%;
+  width: 100%;
+  background-color: $footer-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2% 0;
+  &__contents {
+    display: flex;
+    & a img {
+      width: 30px;
+      height: 30px;
+    }
+    & hr {
+      width: 10%;
+    }
+    &__content {
+      @include centerize();
+      @include nakedButton();
+      @include montserrat('light');
+      color: white;
+      border-right: 2px solid white;
+      padding: 0 1rem;
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+
+  &__copyright {
+    color: white;
+    @include montserrat('');
+  }
+}
