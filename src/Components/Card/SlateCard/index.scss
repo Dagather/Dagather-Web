@@ -1,0 +1,42 @@
+.slateCard {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border: 3px solid lightseagreen;
+  background: linear-gradient(45deg, white, rgb(169, 238, 235));
+
+  border-radius: 5px;
+  padding: 1rem;
+
+  &__video {
+    @include centerize();
+    & iframe {
+      width: 90%;
+      min-height: 350px;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    @include ibmSans('');
+
+    &__name {
+      @include ibmSans('bold');
+    }
+
+    & div {
+      @include centerize();
+      padding: 2.5% 0;
+      width: 100%;
+      border-bottom: 2px solid lightseagreen;
+    }
+
+    div:last-child {
+      border: none;
+    }
+  }
+}
