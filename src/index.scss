@@ -56,8 +56,9 @@
 
 @media screen and (min-width: '1360px') {
   .navBar__container,
-  .container {
-    width: 60%;
+  .container,
+  .MuiPaper-root {
+    width: 60% !important;
   }
 
   .jumbotron {
