@@ -38,7 +38,7 @@ function CommunityPage() {
             onClick: toggle,
             }]}
             columns={[
-              { title: '번호', field: 'name' },
+              { title: '분류', field: 'name' },
               { title: '제목', field: 'surname' },
               { title: '작성자', field: 'birthYear' },
               { title: '작성일자', field: 'birthCity' },
@@ -46,8 +46,8 @@ function CommunityPage() {
             data={dummyBoardData}
             title="Dagather 게시판"
           />
-          <Modal isOpen={modal} toggle={toggle} autoFocus>
-            <NewPostModal />
+          <Modal isOpen={modal} toggle={toggle}>
+            <NewPostModal toggle={toggle} />
           </Modal>
         </div>
       </div>
