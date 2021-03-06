@@ -7,20 +7,20 @@ import Button from 'Components/Button';
 function Jumbotron(props) {
   const { backgroundSrc, title, content, onClick, buttonName } = props;
   return (
-    <div className="jumbotron">
-      <div className="jumbotron__img">
+    <div className="myJumbotron">
+      <div className="myJumbotron__img">
         <img src={backgroundSrc} alt="jumboImg" />
       </div>
-      <div className="jumbotron__text">
-        <div className="jumbotron__text__title">
+      <div className="myJumbotron__text">
+        <div className="myJumbotron__text__title">
           {title}
         </div>
-        <div className="jumbotron__text__desc">
+        <div className="myJumbotron__text__desc">
           {content}
         </div>
         {onClick
         && (
-        <div className="jumbotron__text__btn">
+        <div className="myJumbotron__text__btn">
           <Button onClick={onClick}>{buttonName}</Button>
         </div>)}
       </div>

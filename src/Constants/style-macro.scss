@@ -20,8 +20,8 @@
 
 @mixin centerize() {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 @mixin nakedButton() {
