@@ -8,9 +8,14 @@ import 'react-quill/dist/quill.snow.css';
 
 function NewPostModal(props) {
   const { toggle } = props;
-  const [value, setValue] = useState('');
+  const [content, setContent] = useState('');
+
   const [selectedOption, setSelectedOption] = useState('');
   const optionHandler = (e) => setSelectedOption(e.target.value);
+
+  const [title, setTitle] = useState('');
+  const titleHandler = (e) => setTitle(e.target.value);
+
   const options = (
     <>
       <option>분류</option>
@@ -30,10 +35,10 @@ function NewPostModal(props) {
           <Input className="newPostModal__header__input__opt" id="optSelect" type="select" value={selectedOption} onChange={optionHandler}>
             {options}
           </Input>
-          <Input className="newPostModal__header__input__title" placeholder="제목을 입력하세요" type="textarea" />
+          <Input className="newPostModal__header__input__title" value={title} onChange={titleHandler} placeholder="제목을 입력하세요" type="textarea" />
         </div>
       </div>
-      <ReactQuill theme="snow" value={value} onChange={setValue} />
+      <ReactQuill theme="snow" value={content} onChange={setContent} />
       <div className="newPostModal__footer">
         <Button className="newPostModal__footer__save"> 완료 </Button>
         <Button onClick={toggle}> 닫기 </Button>
