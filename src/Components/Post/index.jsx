@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Button } from 'reactstrap';
 
-function ReadPostModal({ values, toggle }) {
+function Post({ values, toggle }) {
   const datas = {
     category: values[0],
     title: values[1],
@@ -14,28 +14,28 @@ function ReadPostModal({ values, toggle }) {
   const { category, title, writer, date } = datas;
 
   return (
-    <div className="readPostModal">
-      <div className="readPostModal__header">
-        <div className="readPostModal__header__main">
+    <div className="post">
+      <div className="post__header">
+        <div className="post__header__main">
           {title}
         </div>
       </div>
-      <div className="readPostModal__content">
+      <div className="post__content">
         {date}
         {writer}
         {category}
       </div>
-      <div className="readPostModal__footer">
-        <Button className="readPostModal__footer__save"> 완료 </Button>
+      <div className="post__footer">
+        <Button className="post__footer__save"> 완료 </Button>
         <Button onClick={toggle}> 닫기 </Button>
       </div>
     </div>
   );
 }
 
-ReadPostModal.propTypes = {
+Post.propTypes = {
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   toggle: PropTypes.func.isRequired,
 };
 
-export default ReadPostModal;
+export default Post;

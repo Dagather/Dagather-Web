@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
+import Post from 'Components/Post';
 import NewPostModal from 'Components/Modals/NewPostModal';
-import ReadPostModal from 'Components/Modals/ReadPostModal';
 
 import tableIcons from 'Constants/icons';
 import dummyBoardData from 'Constants/dummy';
@@ -44,7 +44,7 @@ function CommunityPage() {
         values.push(col.getAttribute('value'));
       });
     }
-    return <ReadPostModal values={values} toggle={readPostToggle} />;
+    return <Post values={values} toggle={readPostToggle} />;
   };
 
   const setRef = () => {
