@@ -16,6 +16,8 @@ import { Modal } from 'reactstrap';
 function CommunityPage() {
   const tableRef = useRef();
 
+  const [curPage, setCurPage] = useState(0);
+
   const [rowsRef, setRowsRef] = useState(null);
   const [postIndex, setPostIndex] = useState(null);
 
@@ -45,10 +47,14 @@ function CommunityPage() {
     return <ReadPostModal values={values} toggle={readPostToggle} />;
   };
 
-  useEffect(() => {
+  const setRef = () => {
     const ref = tableRef.current.tableContainerDiv.current
       .childNodes[0].childNodes[0].children[1];
     setRowsRef(ref);
+  };
+
+  useEffect(() => {
+    setRef();
   }, []);
 
   const tableStyle = {
@@ -61,36 +67,40 @@ function CommunityPage() {
       <Jumbotron title="Feel free to talk." content="Always available for everyone" backgroundSrc={communityBg} />
       <div className="container">
         <div className="communityPage">
-          <MaterialTable
-            style={tableStyle}
-            options={{
-              paginationType: 'stepped',
-            }}
-            icons={tableIcons}
-            actions={[{ icon: () => (
-              '글쓰기'
-            ),
-            isFreeAction: true,
-            onClick: newPostToggle,
-            }]}
-            columns={[
-              { title: '분류', field: 'name' },
-              { title: '제목', field: 'surname' },
-              { title: '작성자', field: 'birthYear' },
-              { title: '작성일자', field: 'birthCity' },
-            ]}
-            data={dummyBoardData}
-            title="Dagather 게시판"
-            onRowClick={(e) => rowClickHandler(e)}
-            tableRef={tableRef}
-          />
+          {!readPostModal && (
+            <MaterialTable
+              style={tableStyle}
+              options={{
+                paginationType: 'stepped',
+                initialPage: curPage,
+              }}
+              icons={tableIcons}
+              actions={[{ icon: () => (
+                '글쓰기'
+              ),
+              isFreeAction: true,
+              onClick: newPostToggle,
+              }]}
+              columns={[
+                { title: '분류', field: 'name' },
+                { title: '제목', field: 'surname' },
+                { title: '작성자', field: 'birthYear' },
+                { title: '작성일자', field: 'birthCity' },
+              ]}
+              data={dummyBoardData}
+              title="Dagather 게시판"
+              onRowClick={(e) => rowClickHandler(e)}
+              onChangePage={(pageNum) => {
+                setRef();
+                setCurPage(pageNum);
+              }}
+              tableRef={tableRef}
+            />
+          )}
+          {readPostModal && renderReadPost()}
           <Modal isOpen={newPostModal} toggle={newPostToggle}>
             <NewPostModal toggle={newPostToggle} />
           </Modal>
-          <Modal isOpen={readPostModal} toggle={readPostToggle}>
-            {renderReadPost()}
-          </Modal>
-
         </div>
       </div>
       <Footer />
