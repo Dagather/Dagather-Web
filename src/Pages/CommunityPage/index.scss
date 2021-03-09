@@ -2,5 +2,9 @@
   margin: auto;
   .communityPage {
     width: 100%;
+
+    &__content {
+      width: 100%;
+    }
   }
 }

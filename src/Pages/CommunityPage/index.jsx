@@ -67,7 +67,8 @@ function CommunityPage() {
       <Jumbotron title="Feel free to talk." content="Always available for everyone" backgroundSrc={communityBg} />
       <div className="container">
         <div className="communityPage">
-          {!readPostModal && (
+          <div className="communityPage__content">
+            {!readPostModal && (
             <MaterialTable
               style={tableStyle}
               options={{
@@ -96,8 +97,9 @@ function CommunityPage() {
               }}
               tableRef={tableRef}
             />
-          )}
-          {readPostModal && renderReadPost()}
+            )}
+            {readPostModal && renderReadPost()}
+          </div>
           <Modal isOpen={newPostModal} toggle={newPostToggle}>
             <NewPostModal toggle={newPostToggle} />
           </Modal>
