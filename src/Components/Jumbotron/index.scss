@@ -1,4 +1,4 @@
-.jumbotron {
+.myJumbotron {
   left: 0;
   position: relative;
   width: 100vw;
@@ -7,12 +7,13 @@
   justify-content: space-around;
   &__img {
     & img {
+      width: 100%;
       max-height: 300px;
     }
   }
   &__text {
     position: absolute;
-    left: 5%;
+    left: 8%;
     color: white;
     display: flex;
     flex-direction: column;

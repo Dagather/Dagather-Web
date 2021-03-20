@@ -1,0 +1,60 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  @include ibmSans('medium');
+  & hr {
+    @include vanylaHr();
+  }
+
+  &__tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &__back {
+      @include nakedButton();
+    }
+    &__buttons {
+      button:first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    &__left {
+      width: 100%;
+      flex: 2;
+      @include centerize();
+      flex-direction: column;
+    }
+
+    &__right {
+      @include centerize();
+      flex: 5;
+      flex-direction: column;
+
+      &__title {
+        font-size: 1.5rem;
+      }
+
+      &__down {
+        width: 50%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
+  }
+
+  &__content {
+    &__desc {
+      min-height: 300px;
+      padding: 3%;
+    }
+  }
+}

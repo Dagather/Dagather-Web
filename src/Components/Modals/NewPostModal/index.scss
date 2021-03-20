@@ -1,0 +1,66 @@
+.newPostModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+  width: 70%;
+  height: 70%;
+
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: white;
+
+  padding: 1%;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+
+    width: 90%;
+
+    &__main {
+      font-size: 2.5rem;
+      @include ibmSans('bold');
+      margin-bottom: 1rem;
+    }
+    &__input {
+      @include centerize();
+
+      &__opt {
+        width: 10% !important;
+        max-height: 2.5rem;
+      }
+      &__title {
+        width: 90% !important;
+        max-height: 2.5rem;
+        resize: none;
+      }
+    }
+  }
+  & > .quill {
+    width: 90%;
+    height: 50%;
+    & .ql-container {
+      height: 80%;
+    }
+  }
+
+  &__file {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__footer {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    &__save {
+      margin-right: 1rem;
+    }
+  }
+}

@@ -11,10 +11,14 @@
 @import 'Components/Footer/index.scss';
 @import 'Components/Card/index.scss';
 @import 'Components/Card/SlateCard/index.scss';
+@import 'Components/Post/index.scss';
+@import 'Components/Modals/NewPostModal/index.scss';
 
 // Page
 @import 'Pages/MainPage/index.scss';
 @import 'Pages/RobotPage/index.scss';
+@import 'Pages/CommunityPage/index.scss';
+@import 'Pages/PostDetailPage/index.scss';
 
 // Font
 @font-face {
@@ -57,12 +61,12 @@
 @media screen and (min-width: '1360px') {
   .navBar__container,
   .container {
-    width: 60%;
+    width: 60% !important;
   }
 
-  .jumbotron {
+  .myJumbotron {
     &__text {
-      left: 20%;
+      left: 21%;
     }
 
     &__img {
@@ -76,17 +80,16 @@
 html,
 body,
 #root {
-  height: 100%;
   overflow-x: hidden;
+  overflow-y: overlay;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   @media screen and (max-width: '1360px') {
     font-size: 0.9rem;
   }
-}
 
-body {
-  overflow-y: initial;
-  margin: 0;
-  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

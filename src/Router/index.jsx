@@ -10,6 +10,7 @@ function Router() {
       <Route exact path="/process" component={MyRoute.ProcessPage} />
       <Route exact path="/robot" component={MyRoute.RobotPage} />
       <Route exact path="/community" component={MyRoute.CommunityPage} />
+      <Route exact path="/community/post/:postIndex" component={MyRoute.PostDetailPage} />
       <Route exact path="/about" component={MyRoute.AboutPage} />
     </Switch>
   );
