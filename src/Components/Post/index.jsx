@@ -59,9 +59,13 @@ function Post() {
         <hr />
         <div className="post__content__file">
           첨부파일
-          <img src={download} alt="download" />
+          <div className="post__content__file__download">
+            <img src={download} alt="download" />
+            <span>&nbsp;&nbsp;SuperRobot.json</span>
+          </div>
         </div>
       </div>
+      <hr />
     </div>
   );
 }
