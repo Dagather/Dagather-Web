@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
@@ -15,6 +17,7 @@ import { Modal } from 'reactstrap';
 
 function CommunityPage() {
   const tableRef = useRef();
+  const history = useHistory();
 
   const [curPage, setCurPage] = useState(0);
 
@@ -35,6 +38,7 @@ function CommunityPage() {
     const rowIndex = row.getAttribute('index');
     setPostIndex(rowIndex);
     readPostToggle();
+    history.push({ pathname: '/community/post/1' });
   };
 
   const renderReadPost = () => {

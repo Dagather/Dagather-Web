@@ -34,3 +34,8 @@
     outline: none;
   }
 }
+
+@mixin vanylaHr() {
+  margin-inline-start: unset !important;
+  margin-inline-end: unset !important;
+}

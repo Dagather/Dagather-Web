@@ -1,41 +1,69 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+
+import leftArrow from 'Assets/img/icon/leftArrow.svg';
+import download from 'Assets/img/icon/download.svg';
 
 import { Button } from 'reactstrap';
 
-function Post({ values, toggle }) {
-  const datas = {
-    category: values[0],
-    title: values[1],
-    writer: values[2],
-    date: values[3],
+function Post() {
+  // 상위 컴포넌트한테 포스트 유니크 식별 번호 Props로 받은 뒤
+  // 데이터베이스에서 유니크 식별 번호로 포스트 가져오는 방식으로 구현 예정.
+  const history = useHistory();
+
+  const goBack = () => {
+    history.goBack();
   };
-  const { category, title, writer, date } = datas;
 
   return (
     <div className="post">
-      <div className="post__header">
-        <div className="post__header__main">
-          {title}
+      <div className="post__tabs">
+        <button className="post__tabs__back" type="button" onClick={goBack}>
+          <img src={leftArrow} alt="arrow" />
+        </button>
+        <div className="post__tabs__buttons">
+          <Button>수정</Button>
+          <Button>삭제</Button>
         </div>
       </div>
-      <div className="post__content">
-        {date}
-        {writer}
-        {category}
+      <hr />
+      <div className="post__header">
+        <div className="post__header__left">
+          <div className="post__header__left__category">
+            업로드
+          </div>
+          <div className="post__header__left__index">
+            #1
+          </div>
+        </div>
+        <div className="post__header__right">
+          <div className="post__header__right__title">
+            새로운 로봇을 업로드합니다.
+          </div>
+          <div className="post__header__right__down">
+            <div className="post__header__right__down__writer">
+              김로봇
+            </div>
+            <div className="post__header__right__down__date">
+              2021-03-01
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="post__footer">
-        <Button className="post__footer__save"> 완료 </Button>
-        <Button onClick={toggle}> 닫기 </Button>
+      <hr />
+      <div className="post__content">
+        <div className="post__content__desc">
+          상세내용
+        </div>
+        <hr />
+        <div className="post__content__file">
+          첨부파일
+          <img src={download} alt="download" />
+        </div>
       </div>
     </div>
   );
 }
-
-Post.propTypes = {
-  values: PropTypes.arrayOf(PropTypes.string).isRequired,
-  toggle: PropTypes.func.isRequired,
-};
 
 export default Post;
