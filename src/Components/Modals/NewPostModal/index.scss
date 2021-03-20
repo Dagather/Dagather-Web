@@ -49,6 +49,12 @@
     }
   }
 
+  &__file {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
   &__footer {
     width: 90%;
     display: flex;

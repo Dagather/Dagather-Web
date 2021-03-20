@@ -16,6 +16,12 @@ function NewPostModal(props) {
   const [title, setTitle] = useState('');
   const titleHandler = (e) => setTitle(e.target.value);
 
+  const [file, setFile] = useState(null);
+  const fileHandler = (e) => {
+    setFile(e.target.files[0]);
+    console.log(file);
+  };
+
   const options = (
     <>
       <option>분류</option>
@@ -39,6 +45,9 @@ function NewPostModal(props) {
         </div>
       </div>
       <ReactQuill theme="snow" value={content} onChange={setContent} />
+      <div className="newPostModal__file">
+        <Input type="file" onChange={fileHandler}>파일 업로드</Input>
+      </div>
       <div className="newPostModal__footer">
         <Button className="newPostModal__footer__save"> 완료 </Button>
         <Button onClick={toggle}> 닫기 </Button>
