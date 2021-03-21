@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import firebaseConfig from 'Config/firebaseConfig';
+import { database } from 'Config/firebaseConfig';
 
 import { Input, Button, Label, Spinner } from 'reactstrap';
 import ReactQuill from 'react-quill';
@@ -10,7 +10,7 @@ import 'react-quill/dist/quill.snow.css';
 
 function NewPostModal(props) {
   const { toggle } = props;
-  const database = firebaseConfig();
+  const fbDatabase = database();
   const [content, setContent] = useState('');
 
   const [selectedOption, setSelectedOption] = useState('업로드');
@@ -50,7 +50,7 @@ function NewPostModal(props) {
 
   const sendQuery = async () => {
     setIsLoading(true);
-    const postRef = database.ref('posts');
+    const postRef = fbDatabase.ref('posts');
     const newPostRef = postRef.push();
     await newPostRef.set({
       category: optionMapper[selectedOption],

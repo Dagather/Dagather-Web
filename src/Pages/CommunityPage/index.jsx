@@ -10,7 +10,7 @@ import NewPostModal from 'Components/Modals/NewPostModal';
 import tableIcons from 'Constants/icons';
 import communityBg from 'Assets/img/background/community.jpg';
 
-import firebaseConfig from 'Config/firebaseConfig';
+import { database } from 'Config/firebaseConfig';
 
 import MaterialTable from 'material-table';
 import { Modal } from 'reactstrap';
@@ -19,7 +19,7 @@ function CommunityPage() {
   const tableRef = useRef();
   const history = useHistory();
 
-  const database = firebaseConfig();
+  const fbDatabase = database();
 
   const [curPage, setCurPage] = useState(0);
 
@@ -38,7 +38,7 @@ function CommunityPage() {
   };
 
   const fetchPostList = () => {
-    database.ref('posts').on('value', (snapshot) => {
+    fbDatabase.ref('posts').on('value', (snapshot) => {
       const data = snapshot.val();
       if (data && data !== prevSnapshot) {
         const keyList = Object.keys(data);

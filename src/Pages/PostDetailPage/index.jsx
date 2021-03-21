@@ -7,18 +7,18 @@ import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
 import Post from 'Components/Post';
 
-import firebaseConfig from 'Config/firebaseConfig';
+import { database } from 'Config/firebaseConfig';
 
 import communityBg from 'Assets/img/background/community.jpg';
 
 function PostDetailPage({ match }) {
-  const database = firebaseConfig();
+  const fbDatabase = database();
 
   const [values, setValues] = useState(null);
 
   useEffect(() => {
     const { postId } = match.params;
-    database.ref('posts').child(postId).get().then((snapshot) => {
+    fbDatabase.ref('posts').child(postId).get().then((snapshot) => {
       if (snapshot.exists()) {
         setValues(snapshot.val());
       }
