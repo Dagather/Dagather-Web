@@ -80,7 +80,7 @@ function CommunityPage() {
                 paginationType: 'stepped',
                 initialPage: curPage,
                 showEmptyDataSourceMessage: false,
-                addRowPosition: 'last',
+                addRowPosition: 'first',
               }}
               icons={tableIcons}
               actions={[{ icon: () => (
@@ -93,7 +93,7 @@ function CommunityPage() {
                 { title: '분류', field: 'category' },
                 { title: '제목', field: 'title' },
                 { title: '작성자', field: 'author' },
-                { title: '작성일자', field: 'created_at' },
+                { title: '작성일자', field: 'created_at', defaultSort: 'desc' },
                 { title: 'id', field: 'id', hidden: true },
               ]}
               data={postList}
