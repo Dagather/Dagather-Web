@@ -14,7 +14,7 @@ import communityBg from 'Assets/img/background/community.jpg';
 function PostDetailPage({ match }) {
   const database = firebaseConfig();
 
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState(null);
 
   useEffect(() => {
     const { postId } = match.params;
@@ -34,7 +34,7 @@ function PostDetailPage({ match }) {
             게시글 상세보기
           </div>
           <hr />
-          <Post values={values} toggle={null} />
+          {values && <Post values={values} toggle={null} />}
         </div>
       </div>
       <Footer />
