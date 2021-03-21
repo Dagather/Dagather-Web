@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import { useHistory } from 'react-router-dom';
 
 import leftArrow from 'Assets/img/icon/leftArrow.svg';
@@ -7,10 +9,12 @@ import download from 'Assets/img/icon/download.svg';
 
 import { Button } from 'reactstrap';
 
-function Post() {
-  // 상위 컴포넌트한테 포스트 유니크 식별 번호 Props로 받은 뒤
-  // 데이터베이스에서 유니크 식별 번호로 포스트 가져오는 방식으로 구현 예정.
+function Post(props) {
   const history = useHistory();
+  const { values } = props;
+  const { author, category, content, title, created_at: createdAt } = values;
+
+  const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
 
   const goBack = () => {
     history.goBack();
@@ -31,31 +35,26 @@ function Post() {
       <div className="post__header">
         <div className="post__header__left">
           <div className="post__header__left__category">
-            업로드
-          </div>
-          <div className="post__header__left__index">
-            #1
+            {optionMapper[category]}
           </div>
         </div>
         <div className="post__header__right">
           <div className="post__header__right__title">
-            새로운 로봇을 업로드합니다.
+            {title}
           </div>
           <div className="post__header__right__down">
             <div className="post__header__right__down__writer">
-              김로봇
+              {author}
             </div>
             <div className="post__header__right__down__date">
-              2021-03-01
+              {createdAt}
             </div>
           </div>
         </div>
       </div>
       <hr />
       <div className="post__content">
-        <div className="post__content__desc">
-          상세내용
-        </div>
+        <div className="post__content__desc" dangerouslySetInnerHTML={{ __html: content }} />
         <hr />
         <div className="post__content__file">
           첨부파일
@@ -69,5 +68,15 @@ function Post() {
     </div>
   );
 }
+
+Post.propTypes = {
+  values: PropTypes.shape({
+    author: PropTypes.string,
+    category: PropTypes.number,
+    content: PropTypes.node,
+    created_at: PropTypes.string,
+    title: PropTypes.string,
+  }).isRequired,
+};
 
 export default Post;

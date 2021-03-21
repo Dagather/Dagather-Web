@@ -13,7 +13,7 @@ function NewPostModal(props) {
   const database = firebaseConfig();
   const [content, setContent] = useState('');
 
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState('업로드');
   const optionHandler = (e) => setSelectedOption(e.target.value);
   const optionMapper = { 업로드: 1, 수정: 2, 기타: 3 };
 
@@ -30,12 +30,21 @@ function NewPostModal(props) {
 
   const options = (
     <>
-      <option>분류</option>
-      <option value="업로드">업로드</option>
+      <option disabled>분류</option>
+      <option selected value="업로드">업로드</option>
       <option value="수정">수정</option>
       <option value="기타">기타</option>
     </>
   );
+
+  const parseDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (`0${1 + date.getMonth()}`).slice(-2);
+    const day = (`0${date.getDate()}`).slice(-2);
+
+    return `${year}-${month}-${day}`;
+  };
 
   const sendQuery = async () => {
     setIsLoading(true);
@@ -45,13 +54,11 @@ function NewPostModal(props) {
       category: optionMapper[selectedOption],
       title,
       author: 'Hyukjin',
-      created_at: new Date().toString(),
+      created_at: parseDate(),
       content,
     });
-    setTimeout(() => {
-      setIsLoading(false);
-      toggle();
-    }, 3000);
+    setIsLoading(false);
+    toggle();
   };
 
   return (
