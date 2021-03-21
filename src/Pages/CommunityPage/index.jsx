@@ -59,6 +59,7 @@ function CommunityPage() {
 
   useEffect(() => {
     setRef();
+    // fetchDb();
   }, []);
 
   const tableStyle = {
@@ -87,10 +88,10 @@ function CommunityPage() {
               onClick: newPostToggle,
               }]}
               columns={[
-                { title: '분류', field: 'name' },
-                { title: '제목', field: 'surname' },
-                { title: '작성자', field: 'birthYear' },
-                { title: '작성일자', field: 'birthCity' },
+                { title: '분류', field: 'category' },
+                { title: '제목', field: 'title' },
+                { title: '작성자', field: 'author' },
+                { title: '작성일자', field: 'created_at' },
               ]}
               data={dummyBoardData}
               title="Dagather 게시판"

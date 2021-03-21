@@ -17,5 +17,5 @@ export default () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  firebase.database();
+  return firebase.database();
 };

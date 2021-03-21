@@ -16,6 +16,12 @@
 
   padding: 1%;
 
+  &__loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
   &__header {
     display: flex;
     flex-direction: column;
