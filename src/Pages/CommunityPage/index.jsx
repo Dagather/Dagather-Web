@@ -50,7 +50,7 @@ function CommunityPage() {
         setPostList(fetchedPostList);
         setPrevSnapshot(data);
         setIsLoading(false);
-      }
+      } else setIsLoading(false);
     });
   };
 
@@ -79,8 +79,8 @@ function CommunityPage() {
               options={{
                 paginationType: 'stepped',
                 initialPage: curPage,
-                showEmptyDataSourceMessage: false,
                 addRowPosition: 'first',
+                showEmptyDataSourceMessage: false,
               }}
               icons={tableIcons}
               actions={[{ icon: () => (

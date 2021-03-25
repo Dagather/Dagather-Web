@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import { database } from 'Config/firebaseConfig';
+import { database, storage } from 'Config/firebaseConfig';
+
+import uniqueIdGenerator from 'Utils/unique-id-generator';
 
 import { Input, Button, Label, Spinner } from 'reactstrap';
 import ReactQuill from 'react-quill';
@@ -11,6 +13,7 @@ import 'react-quill/dist/quill.snow.css';
 function NewPostModal(props) {
   const { toggle } = props;
   const fbDatabase = database();
+  const fbStorage = storage();
   const [content, setContent] = useState('');
 
   const [selectedOption, setSelectedOption] = useState('업로드');
@@ -33,7 +36,6 @@ function NewPostModal(props) {
   const [file, setFile] = useState(null);
   const fileHandler = (e) => {
     setFile(e.target.files[0]);
-    console.log(file);
   };
 
   const [showMsg, setShowMsg] = useState(false);
@@ -42,7 +44,7 @@ function NewPostModal(props) {
   const options = (
     <>
       <option disabled>분류</option>
-      <option selected value="업로드">
+      <option value="업로드">
         업로드
       </option>
       <option value="수정">수정</option>
@@ -61,8 +63,7 @@ function NewPostModal(props) {
     return `${year}-${month}-${day} ${hour}:${minute}`;
   };
 
-  const sendQuery = async () => {
-    setIsLoading(true);
+  const pushPost = async (filePath) => {
     const postRef = fbDatabase.ref('posts');
     const newPostRef = postRef.push();
     await newPostRef.set({
@@ -72,7 +73,29 @@ function NewPostModal(props) {
       password,
       created_at: parseDate(),
       content,
+      file: {
+        path: filePath || '',
+      },
     });
+  };
+
+  const uploadFile = async () => {
+    const { name } = file;
+    const uniquePath = uniqueIdGenerator();
+    const scriptRef = fbStorage.ref().child('script').child(uniquePath);
+    const fileRef = scriptRef.child(name);
+    await fileRef.put(file);
+    return `script/${uniquePath}/${name}`;
+  };
+
+  const sendQuery = async () => {
+    setIsLoading(true);
+
+    if (file) {
+      const path = await uploadFile();
+      pushPost(path);
+    } else pushPost();
+
     setIsLoading(false);
     toggle();
   };
@@ -113,9 +136,7 @@ function NewPostModal(props) {
         </div>
         <ReactQuill theme="snow" value={content} onChange={setContent} />
         <div className="newPostModal__file">
-          <Input type="file" onChange={fileHandler}>
-            파일 업로드
-          </Input>
+          <Input type="file" onChange={fileHandler} />
         </div>
         <div className="newPostModal__login">
           <Input
@@ -124,20 +145,16 @@ function NewPostModal(props) {
             onChange={authorHandler}
             placeholder="작성자"
             type="text"
-          >
-            작성자
-          </Input>
+          />
           <Input
             className="newPostModal__login__password"
             value={password}
             onChange={pwHandler}
             placeholder="비밀번호"
             type="password"
-          >
-            비밀번호
-          </Input>
+          />
         </div>
-        {showMsg && <p>제목,내용,작성자 및 패스워드를 모두 입력하세요</p>}
+        {showMsg && '제목,내용,작성자 및 패스워드를 모두 입력하세요'}
         <div className="newPostModal__footer">
           <Button
             onClick={isInputValid}

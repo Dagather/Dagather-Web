@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { useHistory } from 'react-router-dom';
 
+import { storage } from 'Config/firebaseConfig';
+
 import leftArrow from 'Assets/img/icon/leftArrow.svg';
 import download from 'Assets/img/icon/download.svg';
 
@@ -11,13 +13,49 @@ import { Button } from 'reactstrap';
 
 function Post(props) {
   const history = useHistory();
+  const fbStorage = storage();
   const { values } = props;
-  const { author, category, content, title, created_at: createdAt } = values;
-
+  const { author, category, content, title, created_at: createdAt, file } = values;
+  const { path } = file;
   const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
 
   const goBack = () => {
     history.goBack();
+  };
+
+  const getFileName = () => {
+    if (path) {
+      const rootRef = fbStorage.ref();
+      const fileRef = rootRef.child(path);
+      return fileRef.name;
+    } return '';
+  };
+
+  const downloadFile = () => {
+    if (path) {
+      const rootRef = fbStorage.ref();
+      const fileRef = rootRef.child(path);
+      fileRef.getDownloadURL().then((url) => {
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          xhr.onload = () => {
+            const blob = xhr.response;
+            const a = document.createElement('a');
+            a.style = 'display: none';
+            document.body.appendChild(a);
+            a.href = window.URL.createObjectURL(blob);
+            a.download = fileRef.name;
+            a.click();
+            window.URL.revokeObjectURL(url);
+          };
+          xhr.open('GET', url);
+          xhr.send();
+        } catch {
+          // Deal with Error state
+        }
+      });
+    }
   };
 
   return (
@@ -58,10 +96,12 @@ function Post(props) {
         <hr />
         <div className="post__content__file">
           첨부파일
-          <div className="post__content__file__download">
-            <img src={download} alt="download" />
-            <span>&nbsp;&nbsp;SuperRobot.json</span>
-          </div>
+          {path && (
+            <button type="button" className="post__content__file__download" onClick={downloadFile}>
+              <img src={download} alt="download" />
+              <span>{getFileName()}</span>
+            </button>
+          )}
         </div>
       </div>
       <hr />
@@ -76,6 +116,9 @@ Post.propTypes = {
     content: PropTypes.node,
     created_at: PropTypes.string,
     title: PropTypes.string,
+    file: PropTypes.shape({
+      path: PropTypes.string,
+    }),
   }).isRequired,
 };
 
