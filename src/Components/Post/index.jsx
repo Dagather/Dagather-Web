@@ -77,8 +77,14 @@ function Post(props) {
         </button>
         <div className="post__tabs__buttons">
           <Button>수정</Button>
-          <Button onClick={setRmModal}>삭제</Button>
-          <WarnModal isOpen={rmModal} toggle={toggle} confirm={setisRmConfirm} postId={postId} />
+          <Button onClick={toggle}>삭제</Button>
+          <WarnModal
+            isOpen={rmModal}
+            toggle={toggle}
+            confirm={setisRmConfirm}
+            postId={postId}
+            filePath={path}
+          />
         </div>
       </div>
       <hr />

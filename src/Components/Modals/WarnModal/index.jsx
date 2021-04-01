@@ -2,15 +2,16 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { database } from 'Config/firebaseConfig';
+import { database, storage } from 'Config/firebaseConfig';
 
 import warn from 'Assets/img/icon/warn.svg';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 function WarnModal(props) {
-  const { isOpen, toggle, confirm, postId } = props;
+  const { isOpen, toggle, confirm, postId, filePath } = props;
   const fbDatabase = database();
+  const fbStorage = storage();
 
   const sendConfirm = () => {
     confirm(true);
@@ -20,6 +21,13 @@ function WarnModal(props) {
   const removePost = async () => {
     const postRef = fbDatabase.ref('posts').child(postId);
     await postRef.remove();
+
+    if (filePath) {
+      const fileRef = fbStorage.ref().child(filePath);
+      fileRef.delete().then(() => (err) => {
+        console.log(err);
+      });
+    }
     sendConfirm();
   };
 
@@ -48,6 +56,10 @@ WarnModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   confirm: PropTypes.func.isRequired,
   postId: PropTypes.string.isRequired,
+  filePath: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.oneOf([null]).isRequired,
+  ]).isRequired,
 };
 
 export default WarnModal;
