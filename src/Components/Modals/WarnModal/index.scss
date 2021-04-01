@@ -1,0 +1,23 @@
+.warnModal {
+  margin: 0 !important;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &__content {
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    border: 1px solid gray;
+
+    &__text {
+      margin-left: 1rem;
+      font-weight: bolder;
+    }
+
+    & > img {
+      width: 1.2rem;
+    }
+  }
+}

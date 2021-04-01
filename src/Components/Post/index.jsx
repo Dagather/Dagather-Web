@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
 import { useHistory } from 'react-router-dom';
+
+import WarnModal from 'Components/Modals/WarnModal';
 
 import { storage } from 'Config/firebaseConfig';
 
@@ -18,6 +20,11 @@ function Post(props) {
   const { author, category, content, title, created_at: createdAt, file } = values;
   const { path } = file;
   const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
+
+  const [rmModal, setRmModal] = useState(false);
+  const toggle = () => setRmModal(!rmModal);
+
+  const [isRmConfirm, setisRmConfirm] = useState(false);
 
   const goBack = () => {
     history.goBack();
@@ -58,6 +65,13 @@ function Post(props) {
     }
   };
 
+  useEffect(() => {
+    if (isRmConfirm) {
+      console.log('ready to remove');
+      history.goBack();
+    }
+  }, [isRmConfirm]);
+
   return (
     <div className="post">
       <div className="post__tabs">
@@ -66,7 +80,8 @@ function Post(props) {
         </button>
         <div className="post__tabs__buttons">
           <Button>수정</Button>
-          <Button>삭제</Button>
+          <Button onClick={setRmModal}>삭제</Button>
+          <WarnModal isOpen={rmModal} toggle={toggle} confirm={setisRmConfirm} />
         </div>
       </div>
       <hr />
