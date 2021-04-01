@@ -16,7 +16,7 @@ import { Button } from 'reactstrap';
 function Post(props) {
   const history = useHistory();
   const fbStorage = storage();
-  const { values } = props;
+  const { values, postId } = props;
   const { author, category, content, title, created_at: createdAt, file } = values;
   const { path } = file;
   const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
@@ -66,10 +66,7 @@ function Post(props) {
   };
 
   useEffect(() => {
-    if (isRmConfirm) {
-      console.log('ready to remove');
-      history.goBack();
-    }
+    if (isRmConfirm) history.goBack();
   }, [isRmConfirm]);
 
   return (
@@ -81,7 +78,7 @@ function Post(props) {
         <div className="post__tabs__buttons">
           <Button>수정</Button>
           <Button onClick={setRmModal}>삭제</Button>
-          <WarnModal isOpen={rmModal} toggle={toggle} confirm={setisRmConfirm} />
+          <WarnModal isOpen={rmModal} toggle={toggle} confirm={setisRmConfirm} postId={postId} />
         </div>
       </div>
       <hr />
@@ -125,6 +122,7 @@ function Post(props) {
 }
 
 Post.propTypes = {
+  postId: PropTypes.string.isRequired,
   values: PropTypes.shape({
     author: PropTypes.string,
     category: PropTypes.number,

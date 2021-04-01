@@ -15,9 +15,11 @@ function PostDetailPage({ match }) {
   const fbDatabase = database();
 
   const [values, setValues] = useState(null);
+  const [id, setId] = useState(null);
 
   useEffect(() => {
     const { postId } = match.params;
+    setId(postId);
     fbDatabase.ref('posts').child(postId).get().then((snapshot) => {
       if (snapshot.exists()) {
         setValues(snapshot.val());
@@ -34,7 +36,7 @@ function PostDetailPage({ match }) {
             게시글 상세보기
           </div>
           <hr />
-          {values && <Post values={values} toggle={null} />}
+          {values && <Post values={values} postId={id} toggle={null} />}
         </div>
       </div>
       <Footer />

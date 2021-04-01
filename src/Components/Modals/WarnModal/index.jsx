@@ -2,16 +2,25 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
+import { database } from 'Config/firebaseConfig';
+
 import warn from 'Assets/img/icon/warn.svg';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 function WarnModal(props) {
-  const { isOpen, toggle, confirm } = props;
+  const { isOpen, toggle, confirm, postId } = props;
+  const fbDatabase = database();
 
   const sendConfirm = () => {
     confirm(true);
     toggle();
+  };
+
+  const removePost = async () => {
+    const postRef = fbDatabase.ref('posts').child(postId);
+    await postRef.remove();
+    sendConfirm();
   };
 
   return (
@@ -28,7 +37,7 @@ function WarnModal(props) {
       </ModalBody>
       <ModalFooter>
         <Button onClick={toggle}>취소</Button>
-        <Button onClick={sendConfirm} color="danger">삭제</Button>
+        <Button onClick={removePost} color="danger">삭제</Button>
       </ModalFooter>
     </Modal>
   );
@@ -38,6 +47,7 @@ WarnModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   confirm: PropTypes.func.isRequired,
+  postId: PropTypes.string.isRequired,
 };
 
 export default WarnModal;
