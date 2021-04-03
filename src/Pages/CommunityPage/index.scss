@@ -13,3 +13,20 @@
     }
   }
 }
+
+.newPostModal {
+  width: 70% !important;
+  height: 70%;
+  max-width: unset !important;
+  margin: 0 !important;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) !important;
+
+  & .modal-content {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

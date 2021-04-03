@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
-import NewPostModal from 'Components/Modals/NewPostModal';
+import PostModal from 'Components/Modals/PostModal';
 
 import tableIcons from 'Constants/icons';
 import communityBg from 'Assets/img/background/community.jpg';
@@ -106,8 +106,8 @@ function CommunityPage() {
               isLoading={isLoading}
             />
           </div>
-          <Modal isOpen={newPostModal} toggle={newPostToggle}>
-            <NewPostModal toggle={newPostToggle} />
+          <Modal className="newPostModal" isOpen={newPostModal} toggle={newPostToggle}>
+            <PostModal toggle={newPostToggle} mode="new" />
           </Modal>
         </div>
       </div>

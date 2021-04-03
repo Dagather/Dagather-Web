@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
+
+import GoBackButton from 'Components/Button/GoBackButton';
 
 import { database, storage } from 'Config/firebaseConfig';
 
 import uniqueIdGenerator from 'Utils/unique-id-generator';
 
+import xIcon from 'Assets/img/icon/xIcon.svg';
+
 import { Input, Button, Label, Spinner } from 'reactstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function NewPostModal(props) {
-  const { toggle } = props;
+function PostModal(props) {
+  const { toggle, mode, postId } = props;
   const fbDatabase = database();
   const fbStorage = storage();
   const [content, setContent] = useState('');
@@ -19,6 +23,7 @@ function NewPostModal(props) {
   const [selectedOption, setSelectedOption] = useState('업로드');
   const optionHandler = (e) => setSelectedOption(e.target.value);
   const optionMapper = { 업로드: 1, 수정: 2, 기타: 3 };
+  const rOptionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
 
   const [title, setTitle] = useState('');
   const titleHandler = (e) => setTitle(e.target.value);
@@ -40,6 +45,7 @@ function NewPostModal(props) {
 
   const [showMsg, setShowMsg] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFileUpdated, setIsFileUpdated] = useState(false);
 
   const options = (
     <>
@@ -109,15 +115,55 @@ function NewPostModal(props) {
     }
   };
 
+  const nameParser = (fileData) => {
+    if (typeof fileData === 'object' && fileData.name) return fileData.name;
+    if (typeof fileData === 'string') {
+      const li = fileData.lastIndexOf('/');
+      return fileData.substr(li + 1);
+    }
+    return '';
+  };
+
+  const removeFile = () => {
+    setIsFileUpdated(true);
+    setFile(null);
+    console.log(isFileUpdated);
+  };
+
+  useEffect(() => {
+    if (mode === 'edit') {
+      fbDatabase.ref('posts').child(postId).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          const values = snapshot.val();
+          const {
+            title: editTitle,
+            category,
+            content: editContent,
+            file: editFile,
+          } = values;
+          setTitle(editTitle);
+          setContent(editContent);
+          setSelectedOption(rOptionMapper[category]);
+          setFile(editFile.path);
+        }
+      });
+    }
+  }, []);
+
   return (
     <>
-      <div className="newPostModal">
-        <div className="newPostModal__header">
-          <div className="newPostModal__header__main">새 글 작성</div>
-          <div className="newPostModal__header__input">
+      <div className="postModal">
+        {mode === 'edit' && (
+          <GoBackButton className="post_goback" />
+        )}
+        <div className="postModal__header">
+          <div className="postModal__header__main">
+            {mode === 'edit' ? '게시글 수정' : '새 게시글 작성'}
+          </div>
+          <div className="postModal__header__input">
             <Label for="optSelect" />
             <Input
-              className="newPostModal__header__input__opt"
+              className="postModal__header__input__opt"
               id="optSelect"
               type="select"
               value={selectedOption}
@@ -126,7 +172,7 @@ function NewPostModal(props) {
               {options}
             </Input>
             <Input
-              className="newPostModal__header__input__title"
+              className="postModal__header__input__title"
               value={title}
               onChange={titleHandler}
               placeholder="제목을 입력하세요"
@@ -135,45 +181,67 @@ function NewPostModal(props) {
           </div>
         </div>
         <ReactQuill theme="snow" value={content} onChange={setContent} />
-        <div className="newPostModal__file">
-          <Input type="file" onChange={fileHandler} />
+        <div className="postModal__file">
+          <Label className="postModal__file__header">첨부파일</Label>
+          {
+            (file && mode === 'edit') ? (
+              <div className="postModal__file__name">
+                <span>{nameParser(file)}</span>
+                <button type="button" className="postModal__file__name__rm" onClick={removeFile}>
+                  <img src={xIcon} alt="xicon" />
+                </button>
+              </div>
+            ) : (
+              <Input type="file" onChange={fileHandler} />
+            )
+          }
+
         </div>
-        <div className="newPostModal__login">
-          <Input
-            className="newPostModal__login__author"
-            value={author}
-            onChange={authorHandler}
-            placeholder="작성자"
-            type="text"
-          />
-          <Input
-            className="newPostModal__login__password"
-            value={password}
-            onChange={pwHandler}
-            placeholder="비밀번호"
-            type="password"
-          />
-        </div>
+        {mode === 'new' && (
+          <div className="postModal__login">
+            <Input
+              className="postModal__login__author"
+              value={author}
+              onChange={authorHandler}
+              placeholder="작성자"
+              type="text"
+            />
+            <Input
+              className="postModal__login__password"
+              value={password}
+              onChange={pwHandler}
+              placeholder="비밀번호"
+              type="password"
+            />
+          </div>
+        )}
         {showMsg && '제목,내용,작성자 및 패스워드를 모두 입력하세요'}
-        <div className="newPostModal__footer">
+        <div className="postModal__footer">
+          <Button color="danger" onClick={toggle}>취소</Button>
           <Button
+            color="success"
             onClick={isInputValid}
-            className="newPostModal__footer__save"
+            className="postModal__footer__save"
           >
             완료
           </Button>
-          <Button onClick={toggle}> 닫기 </Button>
         </div>
         {isLoading && (
-          <Spinner className="newPostModal__loader" color="success" />
+          <Spinner className="postModal__loader" color="success" />
         )}
       </div>
     </>
   );
 }
 
-NewPostModal.propTypes = {
+PostModal.propTypes = {
+  mode: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
+  postId: PropTypes.string,
 };
 
-export default NewPostModal;
+PostModal.defaultProps = {
+  postId: null,
+};
+
+export default PostModal;

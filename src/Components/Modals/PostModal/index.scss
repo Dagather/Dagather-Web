@@ -1,20 +1,22 @@
-.newPostModal {
+.postModal {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-
-  width: 70%;
-  height: 70%;
-
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
   background-color: white;
-
   padding: 1%;
+
+  width: 100%;
+  min-height: 300px;
+  height: 100%;
+
+  & .post_goback {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 3%;
+  }
 
   &__loader {
     position: absolute;
@@ -37,36 +39,51 @@
       @include centerize();
 
       &__opt {
-        width: 10% !important;
+        width: 15% !important;
         max-height: 2.5rem;
       }
       &__title {
-        width: 90% !important;
+        width: 85% !important;
         max-height: 2.5rem;
         resize: none;
       }
     }
   }
-  & > .quill {
+  .quill {
     width: 90%;
     height: 50%;
     & .ql-container {
       height: 80%;
+      min-height: 150px;
     }
   }
 
   &__file {
     width: 90%;
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
+    margin-top: 2%;
+    &__header {
+      width: 100%;
+      font-size: 1.5rem;
+      @include ibmSans('bold');
+    }
+    &__name {
+      width: 100%;
+      &__rm {
+        @include nakedButton();
+        margin-left: 3%;
+      }
+    }
   }
 
   &__footer {
     width: 90%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     &__save {
-      margin-right: 1rem;
+      margin-left: 1rem;
     }
   }
 }
