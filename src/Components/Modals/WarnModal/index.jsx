@@ -1,4 +1,10 @@
-import React from 'react';
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-console */
+/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-no-undef */
+import React, { useState, setState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -18,6 +24,28 @@ function WarnModal(props) {
     toggle();
   };
 
+  const [savedAuthor, setSavedAuthor] = useState('');
+  const [savedPw, setSavedPw] = useState('');
+  const [showMsg, setShowMsg] = useState(false);
+
+  const [author, setAuthor] = useState('');
+  const authorHandler = (e) => {
+    setAuthor(e.target.value);
+    const authorRef = fbDatabase.ref(`posts/${postId}/author`);
+    authorRef.on('value', (snapshot) => {
+      setSavedAuthor(snapshot.val());
+    });
+  };
+
+  const [password, setPassword] = useState('');
+  const pwHandler = (e) => {
+    setPassword(e.target.value);
+    const pwRef = fbDatabase.ref(`posts/${postId}/password`);
+    pwRef.on('value', (snapshot) => {
+      setSavedPw(snapshot.val());
+    });
+  };
+
   const removePost = async () => {
     const postRef = fbDatabase.ref('posts').child(postId);
     await postRef.remove();
@@ -31,21 +59,47 @@ function WarnModal(props) {
     sendConfirm();
   };
 
+  const checkIdPwValid = () => {
+    if (savedAuthor === author && savedPw === password) {
+      setShowMsg(false);
+      removePost();
+    } else {
+      setShowMsg(true);
+    }
+  };
+
   return (
     <Modal className="warnModal" isOpen={isOpen} toggle={toggle}>
-      <ModalHeader>
-        삭제
-      </ModalHeader>
+      <ModalHeader>삭제</ModalHeader>
       <ModalBody>
         <div className="warnModal__main">게시글을 삭제하시겠습니까?</div>
         <div className="warnModal__content">
           <img src={warn} alt="warnIcon" />
-          <span className="warnModal__content__text">삭제 시 해당 게시글의 복구는 불가능합니다.</span>
+          <span className="warnModal__content__text">
+            삭제 시 해당 게시글의 복구는 불가능합니다.
+          </span>
+
+          <input
+            placeholder="작성자"
+            type="text"
+            value={author}
+            onChange={authorHandler}
+          />
+
+          <input
+            placeholder="비밀번호"
+            type="password"
+            value={password}
+            onChange={pwHandler}
+          />
         </div>
       </ModalBody>
+      {showMsg && '작성자 혹은 패스워드가 일치하지 않습니다.'}
       <ModalFooter>
         <Button onClick={toggle}>취소</Button>
-        <Button onClick={removePost} color="danger">삭제</Button>
+        <Button onClick={checkIdPwValid} color="danger">
+          삭제
+        </Button>
       </ModalFooter>
     </Modal>
   );
