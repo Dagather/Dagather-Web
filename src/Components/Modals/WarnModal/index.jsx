@@ -1,10 +1,4 @@
-/* eslint-disable operator-linebreak */
-/* eslint-disable no-console */
-/* eslint-disable func-names */
-/* eslint-disable prefer-arrow-callback */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-no-undef */
-import React, { useState, setState } from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 

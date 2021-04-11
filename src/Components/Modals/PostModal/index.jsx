@@ -9,6 +9,7 @@ import { database, storage } from 'Config/firebaseConfig';
 import uniqueIdGenerator from 'Utils/unique-id-generator';
 
 import xIcon from 'Assets/img/icon/xIcon.svg';
+import warn from 'Assets/img/icon/warn.svg';
 
 import { Input, Button, Label, Spinner } from 'reactstrap';
 import ReactQuill from 'react-quill';
@@ -43,7 +44,7 @@ function PostModal(props) {
     setFile(e.target.files[0]);
   };
 
-  const [showMsg, setShowMsg] = useState(false);
+  const [showMsg, setShowMsg] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFileUpdated, setIsFileUpdated] = useState(false);
 
@@ -107,12 +108,10 @@ function PostModal(props) {
   };
 
   const isInputValid = () => {
-    if (author && password && title && content) {
-      setShowMsg(false);
-      sendQuery();
-    } else {
-      setShowMsg(true);
-    }
+    console.log(mode, title, content);
+    if (mode === 'new') {
+      return author && password && title && content;
+    } return title && content;
   };
 
   const nameParser = (fileData) => {
@@ -128,6 +127,32 @@ function PostModal(props) {
     setIsFileUpdated(true);
     setFile(null);
     console.log(isFileUpdated);
+  };
+
+  const warnMsgHandler = (arr) => {
+    let warnMsg = '';
+    arr.forEach((msg) => {
+      warnMsg += `${msg}, `;
+    });
+    warnMsg = warnMsg.substr(0, warnMsg.length - 2);
+    warnMsg += ': 필수입력사항입니다.';
+    return warnMsg;
+  };
+
+  const successHandler = () => {
+    if (isInputValid()) {
+      setShowMsg([]);
+      sendQuery();
+    } else {
+      const notifyArray = [];
+      if (mode === 'new') {
+        if (!author) notifyArray.push('작성자');
+        if (!password) notifyArray.push('패스워드');
+      }
+      if (!title) notifyArray.push('제목');
+      if (!content || content === '<p><br></p>') notifyArray.push('내용');
+      setShowMsg(notifyArray);
+    }
   };
 
   useEffect(() => {
@@ -197,6 +222,17 @@ function PostModal(props) {
           }
 
         </div>
+        {showMsg.length > 0 && (
+          <div className="postModal__warn">
+            <div className="postModal__warn__icon">
+              <img src={warn} alt="warnIcon" />
+            </div>
+            <div className="postModal__warn__content">
+              &nbsp;
+              {warnMsgHandler(showMsg)}
+            </div>
+          </div>
+        ) }
         {mode === 'new' && (
           <div className="postModal__login">
             <Input
@@ -215,12 +251,11 @@ function PostModal(props) {
             />
           </div>
         )}
-        {showMsg && '제목,내용,작성자 및 패스워드를 모두 입력하세요'}
         <div className="postModal__footer">
-          <Button color="danger" onClick={toggle}>취소</Button>
+          {mode === 'new' && <Button color="danger" onClick={toggle}>취소</Button>}
           <Button
             color="success"
-            onClick={isInputValid}
+            onClick={successHandler}
             className="postModal__footer__save"
           >
             완료

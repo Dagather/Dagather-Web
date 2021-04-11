@@ -11,6 +11,16 @@
   min-height: 300px;
   height: 100%;
 
+  &__warn {
+    @include centerize();
+    color: red;
+
+    &__content {
+      @include centerize();
+      flex-direction: column;
+    }
+  }
+
   & .post_goback {
     position: absolute;
     left: 0;
