@@ -9,7 +9,7 @@ import warn from 'Assets/img/icon/warn.svg';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 function WarnModal(props) {
-  const { isOpen, toggle, confirm, postId, filePath } = props;
+  const { isOpen, toggle, confirm, postId, filePath, mode } = props;
   const fbDatabase = database();
   const fbStorage = storage();
 
@@ -46,9 +46,7 @@ function WarnModal(props) {
 
     if (filePath) {
       const fileRef = fbStorage.ref().child(filePath);
-      fileRef.delete().then(() => (err) => {
-        console.log(err);
-      });
+      await fileRef.delete().then().catch((err) => console.log(err));
     }
     sendConfirm();
   };
@@ -56,21 +54,24 @@ function WarnModal(props) {
   const checkIdPwValid = () => {
     if (savedAuthor === author && savedPw === password) {
       setShowMsg(false);
-      removePost();
+      if (mode === 'remove') removePost();
+      else sendConfirm(true);
     } else {
       setShowMsg(true);
     }
   };
 
+  const stringSelectorByMode = (editStr, removeStr) => (mode === 'edit' ? editStr : removeStr);
+
   return (
     <Modal className="warnModal" isOpen={isOpen} toggle={toggle}>
-      <ModalHeader>삭제</ModalHeader>
+      <ModalHeader>{stringSelectorByMode('수정', '삭제')}</ModalHeader>
       <ModalBody>
-        <div className="warnModal__main">게시글을 삭제하시겠습니까?</div>
+        <div className="warnModal__main">{stringSelectorByMode('게시글을 수정하시겠습니까?', '게시글을 삭제하시겠습니까?')}</div>
         <div className="warnModal__content">
           <img src={warn} alt="warnIcon" />
           <span className="warnModal__content__text">
-            삭제 시 해당 게시글의 복구는 불가능합니다.
+            {stringSelectorByMode('수정 시 이전 게시글의 내용은 사라집니다.', '삭제 시 해당 게시글의 복구는 불가능합니다.')}
           </span>
 
           <input
@@ -92,7 +93,7 @@ function WarnModal(props) {
       <ModalFooter>
         <Button onClick={toggle}>취소</Button>
         <Button onClick={checkIdPwValid} color="danger">
-          삭제
+          {stringSelectorByMode('수정', '삭제')}
         </Button>
       </ModalFooter>
     </Modal>
@@ -100,6 +101,7 @@ function WarnModal(props) {
 }
 
 WarnModal.propTypes = {
+  mode: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   confirm: PropTypes.func.isRequired,

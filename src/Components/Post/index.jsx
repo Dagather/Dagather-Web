@@ -25,22 +25,34 @@ function Post(props) {
   const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
 
   const [rmModal, setRmModal] = useState(false);
-  const toggle = () => setRmModal(!rmModal);
+  const [editModal, setEditModal] = useState(false);
 
-  const [isRmConfirm, setisRmConfirm] = useState(false);
+  const toggleRemove = () => setRmModal(!rmModal);
+  const toggleEdit = () => setEditModal(!editModal);
+
+  const [isRmConfirm, setIsRmConfirm] = useState(false);
+  const [isEditConfirm, setIsEditConfirm] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [filePathForEdit, setFilePathForEdit] = useState(null);
+  const [fileName, setFileName] = useState('');
 
   const getFileName = () => {
-    if (path) {
+    if (path && !filePathForEdit) {
       const rootRef = fbStorage.ref();
       const fileRef = rootRef.child(path);
-      return fileRef.name;
-    } return '';
+      setFilePathForEdit(path);
+      setFileName(fileRef.name);
+    }
   };
 
   useEffect(() => {
     if (isRmConfirm) history.goBack();
+    getFileName();
   }, [isRmConfirm]);
+
+  useEffect(() => {
+    if (isEditConfirm) setEditMode(true);
+  }, [isEditConfirm]);
 
   return (
     <>
@@ -49,12 +61,21 @@ function Post(props) {
           <div className="post__tabs">
             <GoBackButton />
             <div className="post__tabs__buttons">
-              <Button onClick={() => setEditMode(true)}>수정</Button>
-              <Button onClick={toggle}>삭제</Button>
+              <Button onClick={toggleEdit}>수정</Button>
+              <Button onClick={toggleRemove}>삭제</Button>
               <WarnModal
+                mode="remove"
                 isOpen={rmModal}
-                toggle={toggle}
-                confirm={setisRmConfirm}
+                toggle={toggleRemove}
+                confirm={setIsRmConfirm}
+                postId={postId}
+                filePath={path}
+              />
+              <WarnModal
+                mode="edit"
+                isOpen={editModal}
+                toggle={toggleEdit}
+                confirm={setIsEditConfirm}
                 postId={postId}
                 filePath={path}
               />
@@ -90,7 +111,7 @@ function Post(props) {
               {path && (
               <button type="button" className="post__content__file__download" onClick={() => CDU(path)}>
                 <img src={download} alt="download" />
-                <span>{getFileName()}</span>
+                <span>{fileName}</span>
               </button>
               )}
             </div>
@@ -100,8 +121,10 @@ function Post(props) {
       )}
       {editMode && (
         <PostModal
+          filePathForEdit={filePathForEdit}
           postId={postId}
           mode="edit"
+          toggle={() => history.goBack()}
         />
       )}
     </>

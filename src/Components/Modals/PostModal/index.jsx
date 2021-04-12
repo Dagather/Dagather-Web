@@ -16,7 +16,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 function PostModal(props) {
-  const { toggle, mode, postId } = props;
+  const { toggle, mode, postId, filePathForEdit } = props;
   const fbDatabase = database();
   const fbStorage = storage();
   const [content, setContent] = useState('');
@@ -39,14 +39,15 @@ function PostModal(props) {
     setPassword(e.target.value);
   };
 
-  const [file, setFile] = useState(null);
-  const fileHandler = (e) => {
-    setFile(e.target.files[0]);
-  };
-
   const [showMsg, setShowMsg] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFileUpdated, setIsFileUpdated] = useState(false);
+
+  const [file, setFile] = useState(null);
+  const fileHandler = (e) => {
+    setIsFileUpdated(true);
+    setFile(e.target.files[0]);
+  };
 
   const options = (
     <>
@@ -95,23 +96,60 @@ function PostModal(props) {
     return `script/${uniquePath}/${name}`;
   };
 
+  const removeFile = () => {
+    const fileRef = fbStorage.ref().child(filePathForEdit);
+    if (fileRef) {
+      fileRef.delete().then(() => {
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  };
+
+  const editPost = async (filePath) => {
+    const postRef = fbDatabase.ref('posts');
+    const editPostRef = postRef.child(postId);
+
+    const editData = {
+      category: optionMapper[selectedOption],
+      title,
+      content,
+      file: {
+        path: filePath || '',
+      },
+    };
+
+    editPostRef.update(editData, (err) => {
+      console.log(err);
+    });
+  };
+
   const sendQuery = async () => {
     setIsLoading(true);
+    console.log(file, isFileUpdated, selectedOption);
+    if (mode === 'new') {
+      if (file) {
+        const path = await uploadFile();
+        pushPost(path);
+      } else pushPost();
+    }
 
-    if (file) {
-      const path = await uploadFile();
-      pushPost(path);
-    } else pushPost();
+    if (mode === 'edit') {
+      if (file && isFileUpdated) {
+        if (filePathForEdit) removeFile();
+        const path = await uploadFile();
+        editPost(path);
+      } else editPost();
+    }
 
     setIsLoading(false);
     toggle();
   };
 
   const isInputValid = () => {
-    console.log(mode, title, content);
     if (mode === 'new') {
       return author && password && title && content;
-    } return title && content;
+    } return title && content && (content !== '<p><br></p>');
   };
 
   const nameParser = (fileData) => {
@@ -123,10 +161,9 @@ function PostModal(props) {
     return '';
   };
 
-  const removeFile = () => {
+  const removeFileName = () => {
     setIsFileUpdated(true);
     setFile(null);
-    console.log(isFileUpdated);
   };
 
   const warnMsgHandler = (arr) => {
@@ -157,6 +194,7 @@ function PostModal(props) {
 
   useEffect(() => {
     if (mode === 'edit') {
+      console.log(filePathForEdit);
       fbDatabase.ref('posts').child(postId).get().then((snapshot) => {
         if (snapshot.exists()) {
           const values = snapshot.val();
@@ -212,7 +250,7 @@ function PostModal(props) {
             (file && mode === 'edit') ? (
               <div className="postModal__file__name">
                 <span>{nameParser(file)}</span>
-                <button type="button" className="postModal__file__name__rm" onClick={removeFile}>
+                <button type="button" className="postModal__file__name__rm" onClick={removeFileName}>
                   <img src={xIcon} alt="xicon" />
                 </button>
               </div>
@@ -271,12 +309,15 @@ function PostModal(props) {
 
 PostModal.propTypes = {
   mode: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
+  toggle: PropTypes.func,
   postId: PropTypes.string,
+  filePathForEdit: PropTypes.string,
 };
 
 PostModal.defaultProps = {
+  toggle: null,
   postId: null,
+  filePathForEdit: null,
 };
 
 export default PostModal;
