@@ -126,7 +126,6 @@ function PostModal(props) {
 
   const sendQuery = async () => {
     setIsLoading(true);
-    console.log(file, isFileUpdated, selectedOption);
     if (mode === 'new') {
       if (file) {
         const path = await uploadFile();
@@ -194,7 +193,6 @@ function PostModal(props) {
 
   useEffect(() => {
     if (mode === 'edit') {
-      console.log(filePathForEdit);
       fbDatabase.ref('posts').child(postId).get().then((snapshot) => {
         if (snapshot.exists()) {
           const values = snapshot.val();
