@@ -35,7 +35,6 @@ function PostDetailPage({ match }) {
           <div className="postDetailPage__header">
             게시글 상세보기
           </div>
-          <hr />
           {values && <Post values={values} postId={id} toggle={null} />}
         </div>
       </div>

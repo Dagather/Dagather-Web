@@ -5,6 +5,11 @@
   width: 100%;
   height: 100%;
 
+  border: 1px solid lightgray;
+  border-radius: 8px;
+
+  padding: 3%;
+
   @include ibmSans('medium');
   & hr {
     @include vanylaHr();
@@ -28,24 +33,50 @@
     &__left {
       width: 100%;
       flex: 2;
-      @include centerize();
+      display: flex;
       flex-direction: column;
-    }
+      align-items: flex-start;
 
-    &__right {
-      @include centerize();
-      flex: 5;
-      flex-direction: column;
-
-      &__title {
-        font-size: 1.5rem;
+      &__category {
+        color: $navbar-color;
+        font-weight: bolder;
       }
 
-      &__down {
-        width: 50%;
+      &__box {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+
+        &__inner {
+          display: flex;
+          flex-direction: column;
+
+          &__writer {
+            font-weight: bolder;
+          }
+          &__date {
+            color: gray;
+          }
+        }
+
+        &__icon {
+          background-color: #eed7f7;
+          border-radius: 50%;
+          max-width: 2.5rem;
+          max-height: 2.5rem;
+          padding: 0.3rem;
+
+          margin-right: 1rem;
+
+          & img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+
+      &__title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
       }
     }
   }
@@ -53,7 +84,6 @@
   &__content {
     &__desc {
       min-height: 300px;
-      padding: 3%;
     }
 
     &__file {

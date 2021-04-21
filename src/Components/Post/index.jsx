@@ -11,6 +11,7 @@ import PostModal from 'Components/Modals/PostModal';
 import { storage } from 'Config/firebaseConfig';
 
 import download from 'Assets/img/icon/download.svg';
+import robot from 'Assets/img/icon/robot.png';
 
 import CDU from 'Utils/create-download-url';
 
@@ -85,19 +86,22 @@ function Post(props) {
           <div className="post__header">
             <div className="post__header__left">
               <div className="post__header__left__category">
-                {optionMapper[category]}
+                {`# ${optionMapper[category]}`}
               </div>
-            </div>
-            <div className="post__header__right">
-              <div className="post__header__right__title">
+              <div className="post__header__left__title">
                 {title}
               </div>
-              <div className="post__header__right__down">
-                <div className="post__header__right__down__writer">
-                  {author}
+              <div className="post__header__left__box">
+                <div className="post__header__left__box__icon">
+                  <img src={robot} alt="user_robot" />
                 </div>
-                <div className="post__header__right__down__date">
-                  {createdAt}
+                <div className="post__header__left__box__inner">
+                  <div className="post__header__left__box__inner__writer">
+                    {author}
+                  </div>
+                  <div className="post__header__left__box__inner__date">
+                    {createdAt}
+                  </div>
                 </div>
               </div>
             </div>
