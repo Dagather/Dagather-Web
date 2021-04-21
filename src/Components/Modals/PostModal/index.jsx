@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
-import GoBackButton from 'Components/Button/GoBackButton';
-
 import { database, storage } from 'Config/firebaseConfig';
 
 import uniqueIdGenerator from 'Utils/unique-id-generator';
@@ -214,9 +212,6 @@ function PostModal(props) {
   return (
     <>
       <div className="postModal">
-        {mode === 'edit' && (
-          <GoBackButton className="post_goback" />
-        )}
         <div className="postModal__header">
           <div className="postModal__header__main">
             {mode === 'edit' ? '게시글 수정' : '새 게시글 작성'}
@@ -288,7 +283,7 @@ function PostModal(props) {
           </div>
         )}
         <div className="postModal__footer">
-          {mode === 'new' && <Button color="danger" onClick={toggle}>취소</Button>}
+          <Button color="danger" onClick={toggle}>취소</Button>
           <Button
             color="success"
             onClick={successHandler}
