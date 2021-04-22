@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { database, storage } from 'Config/firebaseConfig';
 
 import uniqueIdGenerator from 'Utils/unique-id-generator';
+import pwdEncrypt from 'Utils/encrypt-decrypt-password';
 
 import xIcon from 'Assets/img/icon/xIcon.svg';
 import warn from 'Assets/img/icon/warn.svg';
@@ -76,7 +77,7 @@ function PostModal(props) {
       category: optionMapper[selectedOption],
       title,
       author,
-      password,
+      password: pwdEncrypt(password),
       created_at: parseDate(),
       content,
       file: {

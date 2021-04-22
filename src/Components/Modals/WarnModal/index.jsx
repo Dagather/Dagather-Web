@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -7,6 +7,7 @@ import { database, storage } from 'Config/firebaseConfig';
 import warn from 'Assets/img/icon/warn.svg';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import pwdEncrypt from 'Utils/encrypt-decrypt-password';
 
 function WarnModal(props) {
   const { isOpen, toggle, confirm, postId, filePath, mode } = props;
@@ -23,21 +24,15 @@ function WarnModal(props) {
   const [showMsg, setShowMsg] = useState(false);
 
   const [author, setAuthor] = useState('');
-  const authorHandler = (e) => {
-    setAuthor(e.target.value);
-    const authorRef = fbDatabase.ref(`posts/${postId}/author`);
-    authorRef.on('value', (snapshot) => {
-      setSavedAuthor(snapshot.val());
-    });
-  };
+  const authorHandler = (e) => setAuthor(e.target.value);
 
   const [password, setPassword] = useState('');
-  const pwHandler = (e) => {
-    setPassword(e.target.value);
-    const pwRef = fbDatabase.ref(`posts/${postId}/password`);
-    pwRef.on('value', (snapshot) => {
-      setSavedPw(snapshot.val());
-    });
+  const pwHandler = (e) => setPassword(e.target.value);
+
+  const cleanUpToggle = () => {
+    setAuthor('');
+    setPassword('');
+    toggle();
   };
 
   const removePost = async () => {
@@ -52,7 +47,10 @@ function WarnModal(props) {
   };
 
   const checkIdPwValid = () => {
-    if (savedAuthor === author && savedPw === password) {
+    const { iv, salt, encryptedPwd } = savedPw;
+    const inputPwd = pwdEncrypt(password, salt, iv);
+
+    if (savedAuthor === author && encryptedPwd === inputPwd.encryptedPwd) {
       setShowMsg(false);
       if (mode === 'remove') removePost();
       else sendConfirm(true);
@@ -63,8 +61,20 @@ function WarnModal(props) {
 
   const stringSelectorByMode = (editStr, removeStr) => (mode === 'edit' ? editStr : removeStr);
 
+  useEffect(() => {
+    const pwRef = fbDatabase.ref(`posts/${postId}/password`);
+    pwRef.on('value', (snapshot) => {
+      setSavedPw(snapshot.val());
+    });
+
+    const authorRef = fbDatabase.ref(`posts/${postId}/author`);
+    authorRef.on('value', (snapshot) => {
+      setSavedAuthor(snapshot.val());
+    });
+  }, []);
+
   return (
-    <Modal className="warnModal" isOpen={isOpen} toggle={toggle}>
+    <Modal className="warnModal" isOpen={isOpen} toggle={cleanUpToggle}>
       <ModalHeader>{stringSelectorByMode('수정', '삭제')}</ModalHeader>
       <ModalBody>
         <div className="warnModal__main">{stringSelectorByMode('게시글을 수정하시겠습니까?', '게시글을 삭제하시겠습니까?')}</div>
@@ -91,7 +101,7 @@ function WarnModal(props) {
       </ModalBody>
       {showMsg && '작성자 혹은 패스워드가 일치하지 않습니다.'}
       <ModalFooter>
-        <Button onClick={toggle}>취소</Button>
+        <Button onClick={cleanUpToggle}>취소</Button>
         <Button onClick={checkIdPwValid} color="danger">
           {stringSelectorByMode('수정', '삭제')}
         </Button>
