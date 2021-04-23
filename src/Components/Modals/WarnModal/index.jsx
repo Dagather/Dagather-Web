@@ -47,10 +47,10 @@ function WarnModal(props) {
   };
 
   const checkIdPwValid = () => {
-    const { iv, salt, encryptedPwd } = savedPw;
+    const { iv, salt, encryptedPwd: originPwd } = savedPw;
     const inputPwd = pwdEncrypt(password, salt, iv);
 
-    if (savedAuthor === author && encryptedPwd === inputPwd.encryptedPwd) {
+    if (savedAuthor === author && originPwd === inputPwd.encryptedPwd) {
       setShowMsg(false);
       if (mode === 'remove') removePost();
       else sendConfirm(true);

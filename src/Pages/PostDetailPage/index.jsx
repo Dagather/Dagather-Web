@@ -32,9 +32,6 @@ function PostDetailPage({ match }) {
       <Jumbotron title="Feel free to talk." content="Always available for everyone" backgroundSrc={communityBg} />
       <div className="container">
         <div className="postDetailPage">
-          <div className="postDetailPage__header">
-            게시글 상세보기
-          </div>
           {values && <Post values={values} postId={id} toggle={null} />}
         </div>
       </div>
