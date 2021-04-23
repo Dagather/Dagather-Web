@@ -1,73 +1,152 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+import PropTypes from 'prop-types';
 
 import { useHistory } from 'react-router-dom';
 
-import leftArrow from 'Assets/img/icon/leftArrow.svg';
+import GoBackButton from 'Components/Button/GoBackButton';
+import WarnModal from 'Components/Modals/WarnModal';
+import PostModal from 'Components/Modals/PostModal';
+
+import { storage } from 'Config/firebaseConfig';
+
 import download from 'Assets/img/icon/download.svg';
+import robot from 'Assets/img/icon/robot.png';
+
+import CDU from 'Utils/create-download-url';
 
 import { Button } from 'reactstrap';
 
-function Post() {
-  // 상위 컴포넌트한테 포스트 유니크 식별 번호 Props로 받은 뒤
-  // 데이터베이스에서 유니크 식별 번호로 포스트 가져오는 방식으로 구현 예정.
+function Post(props) {
   const history = useHistory();
+  const fbStorage = storage();
+  const { values, postId } = props;
+  const { author, category, content, title, created_at: createdAt, file } = values;
+  const { path } = file;
+  const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
 
-  const goBack = () => {
-    history.goBack();
+  const [rmModal, setRmModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+
+  const toggleRemove = () => setRmModal(!rmModal);
+  const toggleEdit = () => setEditModal(!editModal);
+
+  const [isRmConfirm, setIsRmConfirm] = useState(false);
+  const [isEditConfirm, setIsEditConfirm] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [filePathForEdit, setFilePathForEdit] = useState(null);
+  const [fileName, setFileName] = useState('');
+
+  const getFileName = () => {
+    if (path && !filePathForEdit) {
+      const rootRef = fbStorage.ref();
+      const fileRef = rootRef.child(path);
+      setFilePathForEdit(path);
+      setFileName(fileRef.name);
+    }
   };
 
+  useEffect(() => {
+    if (isRmConfirm) history.goBack();
+    getFileName();
+  }, [isRmConfirm]);
+
+  useEffect(() => {
+    if (isEditConfirm) setEditMode(true);
+  }, [isEditConfirm]);
+
   return (
-    <div className="post">
-      <div className="post__tabs">
-        <button className="post__tabs__back" type="button" onClick={goBack}>
-          <img src={leftArrow} alt="arrow" />
-        </button>
-        <div className="post__tabs__buttons">
-          <Button>수정</Button>
-          <Button>삭제</Button>
-        </div>
-      </div>
-      <hr />
-      <div className="post__header">
-        <div className="post__header__left">
-          <div className="post__header__left__category">
-            업로드
-          </div>
-          <div className="post__header__left__index">
-            #1
-          </div>
-        </div>
-        <div className="post__header__right">
-          <div className="post__header__right__title">
-            새로운 로봇을 업로드합니다.
-          </div>
-          <div className="post__header__right__down">
-            <div className="post__header__right__down__writer">
-              김로봇
-            </div>
-            <div className="post__header__right__down__date">
-              2021-03-01
+    <>
+      {!editMode && (
+        <div className="post">
+          <div className="post__tabs">
+            <GoBackButton />
+            <div className="post__tabs__buttons">
+              <Button onClick={toggleEdit}>수정</Button>
+              <Button onClick={toggleRemove}>삭제</Button>
+              <WarnModal
+                mode="remove"
+                isOpen={rmModal}
+                toggle={toggleRemove}
+                confirm={setIsRmConfirm}
+                postId={postId}
+                filePath={path}
+              />
+              <WarnModal
+                mode="edit"
+                isOpen={editModal}
+                toggle={toggleEdit}
+                confirm={setIsEditConfirm}
+                postId={postId}
+                filePath={path}
+              />
             </div>
           </div>
-        </div>
-      </div>
-      <hr />
-      <div className="post__content">
-        <div className="post__content__desc">
-          상세내용
-        </div>
-        <hr />
-        <div className="post__content__file">
-          첨부파일
-          <div className="post__content__file__download">
-            <img src={download} alt="download" />
-            <span>&nbsp;&nbsp;SuperRobot.json</span>
+          <hr />
+          <div className="post__header">
+            <div className="post__header__left">
+              <div className="post__header__left__category">
+                {`# ${optionMapper[category]}`}
+              </div>
+              <div className="post__header__left__title">
+                {title}
+              </div>
+              <div className="post__header__left__box">
+                <div className="post__header__left__box__icon">
+                  <img src={robot} alt="user_robot" />
+                </div>
+                <div className="post__header__left__box__inner">
+                  <div className="post__header__left__box__inner__writer">
+                    {author}
+                  </div>
+                  <div className="post__header__left__box__inner__date">
+                    {createdAt}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+          <hr />
+          <div className="post__content">
+            <div className="post__content__desc" dangerouslySetInnerHTML={{ __html: content }} />
+            <hr />
+            <div className="post__content__file">
+              첨부파일
+              {path && (
+              <button type="button" className="post__content__file__download" onClick={() => CDU(path)}>
+                <img src={download} alt="download" />
+                <span>{fileName}</span>
+              </button>
+              )}
+            </div>
+          </div>
+          <hr />
         </div>
-      </div>
-      <hr />
-    </div>
+      )}
+      {editMode && (
+        <PostModal
+          filePathForEdit={filePathForEdit}
+          postId={postId}
+          mode="edit"
+          toggle={() => history.goBack()}
+        />
+      )}
+    </>
   );
 }
+
+Post.propTypes = {
+  postId: PropTypes.string.isRequired,
+  values: PropTypes.shape({
+    author: PropTypes.string,
+    category: PropTypes.number,
+    content: PropTypes.node,
+    created_at: PropTypes.string,
+    title: PropTypes.string,
+    file: PropTypes.shape({
+      path: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default Post;

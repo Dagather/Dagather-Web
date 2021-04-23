@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@uipath/robot": "1.2.0",
     "bootstrap": "4.6.0",
+    "crypto-js": "4.0.0",
     "firebase": "8.2.6",
     "material-table": "1.69.2",
     "node-sass": "5.0.0",
