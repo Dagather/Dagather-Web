@@ -15,23 +15,20 @@ function RobotPage() {
     '5. 로봇5', '6. 로봇6', '7. 로봇7', '8. 로봇8',
     '9. 로봇9', '10. 로봇10'];
   // Firebase 연동 이후, 로봇 스크립트 및 로봇 이름 받아오는 것 구현 이후에 재작성 예정.
-  const getCard = useCallback(() => {
-    console.log('getCard Rendered!');
-    return (
-      <>
-        <div className="robotPage__tabs">
-          {tmpArray.map((tmpTitle) => (
-            <Card
-              key={tmpTitle}
-              title={tmpTitle}
-              onClick={() => selectCard(tmpTitle)}
-              style={selectedCard}
-            />
-          ))}
-        </div>
-      </>
-    );
-  }, [tmpArray]);
+  const getCard = useCallback(() => (
+    <>
+      <div className="robotPage__tabs">
+        {tmpArray.map((tmpTitle) => (
+          <Card
+            key={tmpTitle}
+            title={tmpTitle}
+            onClick={() => selectCard(tmpTitle)}
+            style={selectedCard}
+          />
+        ))}
+      </div>
+    </>
+  ), [tmpArray]);
   return (
     <>
       <NavBar />

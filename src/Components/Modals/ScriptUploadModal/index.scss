@@ -1,0 +1,46 @@
+.scriptModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 80vh;
+  overflow: hidden;
+  border-radius: 8px;
+
+  &__header {
+    font-size: 1.5rem;
+    font-family: 'IBMPlexSansKR-Bold';
+    text-align: center;
+    padding: 1rem;
+
+    background-color: lightseagreen;
+    color: white;
+  }
+
+  &__content {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    &-input {
+      font-family: 'IBMPlexSansKR-Regular';
+      flex: 2;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    & > button {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.script-modal {
+  & .modal-content {
+    border-radius: 8px !important;
+    border: unset;
+  }
+}

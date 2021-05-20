@@ -15,13 +15,14 @@
 @import 'Components/Post/index.scss';
 @import 'Components/Modals/PostModal/index.scss';
 @import 'Components/Modals/WarnModal/index.scss';
+@import 'Components/Modals/ScriptUploadModal/index.scss';
 
 // Page
 @import 'Pages/MainPage/index.scss';
 @import 'Pages/RobotPage/index.scss';
 @import 'Pages/CommunityPage/index.scss';
 @import 'Pages/PostDetailPage/index.scss';
-@import 'Pages/fix_robotPage/index.scss';
+@import 'Pages/ScriptPage/index.scss';
 
 // Font
 @font-face {

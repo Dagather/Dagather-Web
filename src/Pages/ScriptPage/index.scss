@@ -1,4 +1,4 @@
-.testPage {
+.scriptPage {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -33,6 +33,10 @@
 
     &__addBtn {
       all: unset;
+
+      &:hover {
+        transform: scale(1.3);
+      }
     }
   }
 }

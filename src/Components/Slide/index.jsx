@@ -20,6 +20,8 @@ const Elem = styled.div`
     flex-direction: column;
     justify-content: space-between;
 
+    box-shadow: 4px 4px 4px lightgray;
+
     &:hover {
       background-color: ${(props) => darken(0.15, props.color === 'light' ? '#4cc2bb' : 'lightseagreen')};
       transform: scale(1.05);
@@ -46,6 +48,9 @@ const Author = styled(Text)`
 const LikeContainer = styled.div`
     display: flex;
     align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    background-color: white;
   `;
 
 const Like = styled.img`
@@ -58,6 +63,7 @@ const LikeNum = styled.span`
     color: white;
     font-family: 'IBMPlexSansKR-Regular';
     font-size: 1.5rem;
+    color: black;
   `;
 const Footer = styled.div`
     display: flex;
@@ -71,16 +77,20 @@ function Slide(props) {
   const [onHover, setOnHover] = useState(false);
   const toggle = () => setOnHover(!onHover);
 
+  const pushToRobotDetail = () => {
+    console.log('push!');
+  };
+
   return (
     <Elem
       onMouseEnter={toggle}
       onMouseLeave={toggle}
       color={color}
+      onClick={pushToRobotDetail}
     >
       <Title>
         {title}
       </Title>
-      {/* {onHover && <iframe title="tmp" src="https://www.youtube.com/embed/u2LsOuztwsw" frameBorder="0" />} */}
       <Footer>
         <Author>
           {author}

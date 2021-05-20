@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
 import Slide from 'Components/Slide';
 
+import ScriptUploadModal from 'Components/Modals/ScriptUploadModal';
+
 import tableBg from 'Assets/img/background/table.jpg';
 import plus from 'Assets/img/icon/plus.svg';
 
-function TestPage() {
+import { Modal } from 'reactstrap';
+
+function ScriptPage() {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
   const tmpRobots = [
     {
       title: 'OCR을 활용한 Coivd-19 출입자명부 추출 로봇',
@@ -52,23 +58,25 @@ function TestPage() {
     />);
   };
 
-  const pushRobotDetailPage = () => {
-    console.log('push!');
-  };
-
   return (
     <>
       <NavBar />
       <Jumbotron title="Pick a Robot." content="It's waiting for you." backgroundSrc={tableBg} />
       <div className="container">
-        <div className="testPage">
+        <div className="scriptPage">
           <span className="header">Popular</span>
           <div className="slideChart">
             {getRobotList(true)}
           </div>
           <div className="robotList__header">
-            <span className="header">Robot List</span>
-            <button type="button" className="robotList__addBtn" onClick={pushRobotDetailPage}>
+            <div className="robotList-filter">
+              <span className="header">Robot List</span>
+            </div>
+            <button
+              type="button"
+              className="robotList__addBtn"
+              onClick={toggle}
+            >
               <img src={plus} alt="add" />
             </button>
           </div>
@@ -78,8 +86,11 @@ function TestPage() {
         </div>
       </div>
       <Footer />
+      <Modal isOpen={isOpen} toggle={toggle} className="script-modal">
+        <ScriptUploadModal toggle={toggle} />
+      </Modal>
     </>
   );
 }
 
-export default TestPage;
+export default ScriptPage;
