@@ -12,6 +12,7 @@ function Router() {
       <Route exact path="/community" component={MyRoute.CommunityPage} />
       <Route exact path="/community/post/:postId" component={MyRoute.PostDetailPage} />
       <Route exact path="/about" component={MyRoute.AboutPage} />
+      <Route exact path="/test" component={MyRoute.testPage} />
     </Switch>
   );
 }

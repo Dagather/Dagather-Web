@@ -1,0 +1,42 @@
+.testPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 5rem;
+
+  & .header {
+    margin-left: 0.5rem;
+    font-size: 1.8rem;
+  }
+
+  .slideChart {
+    display: flex;
+    flex-direction: row;
+    // flex-wrap: wrap;
+    overflow-x: scroll;
+  }
+
+  .robotList {
+    &__header {
+      margin-top: 5rem;
+      width: 100%;
+      height: fit-content;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      & img {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    &__addBtn {
+      all: unset;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}

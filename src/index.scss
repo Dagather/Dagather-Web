@@ -21,6 +21,7 @@
 @import 'Pages/RobotPage/index.scss';
 @import 'Pages/CommunityPage/index.scss';
 @import 'Pages/PostDetailPage/index.scss';
+@import 'Pages/fix_robotPage/index.scss';
 
 // Font
 @font-face {
@@ -89,7 +90,11 @@ body,
   margin: 0;
   padding: 0;
   @media screen and (max-width: '1360px') {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
+    .navBar__container,
+    .footer {
+      font-size: 1.3rem;
+    }
   }
 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
