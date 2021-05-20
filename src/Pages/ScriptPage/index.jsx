@@ -17,7 +17,7 @@ function ScriptPage() {
   const toggle = () => setIsOpen(!isOpen);
   const tmpRobots = [
     {
-      title: 'OCR을 활용한 Coivd-19 출입자명부 추출 로봇',
+      title: 'OCR을 활용한 COVID-19 출입자명부 추출 로봇',
       author: '권혁진',
       likeNum: 120,
     },

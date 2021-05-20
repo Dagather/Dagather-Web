@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { useHistory } from 'react-router-dom';
+
 import styled from 'styled-components';
 import { darken } from 'polished';
 
@@ -73,12 +75,15 @@ const Footer = styled.div`
   `;
 
 function Slide(props) {
+  const history = useHistory();
   const { title, author, likeNum, color } = props;
   const [onHover, setOnHover] = useState(false);
   const toggle = () => setOnHover(!onHover);
 
   const pushToRobotDetail = () => {
-    console.log('push!');
+    history.push({
+      pathname: '/script/1',
+    });
   };
 
   return (

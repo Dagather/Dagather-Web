@@ -7,6 +7,12 @@
   overflow: hidden;
   border-radius: 8px;
 
+  & hr {
+    width: 85%;
+    text-align: center;
+    border: 0.5px dashed lightseagreen;
+  }
+
   &__header {
     font-size: 1.5rem;
     font-family: 'IBMPlexSansKR-Bold';
@@ -18,13 +24,28 @@
   }
 
   &__content {
-    flex: 3;
+    flex: 4;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     &-input {
+      margin: 0 5%;
       font-family: 'IBMPlexSansKR-Regular';
-      flex: 2;
+      font-weight: bold;
+
+      &.text {
+        & textarea {
+          width: 90%;
+        }
+        & input {
+          width: 90%;
+        }
+      }
+
+      &.user {
+        display: flex;
+        flex-direction: row;
+      }
     }
   }
 

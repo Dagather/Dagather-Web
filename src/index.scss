@@ -23,6 +23,7 @@
 @import 'Pages/CommunityPage/index.scss';
 @import 'Pages/PostDetailPage/index.scss';
 @import 'Pages/ScriptPage/index.scss';
+@import 'Pages/ScriptDetailPage/index.scss';
 
 // Font
 @font-face {
@@ -91,10 +92,10 @@ body,
   margin: 0;
   padding: 0;
   @media screen and (max-width: '1360px') {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     .navBar__container,
     .footer {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
   }
 
