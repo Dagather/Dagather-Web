@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
+import { database, storage } from 'Config/firebaseConfig';
+
+import uniqueIdGenerator from 'Utils/unique-id-generator';
+import pwdEncrypt from 'Utils/encrypt-decrypt-password';
+
 import { Input, Button } from 'reactstrap';
 
 function ScriptUploadModal(props) {
+  const fbDatabase = database();
+  const fbStorage = storage();
   const { toggle } = props;
 
   const [title, setTitle] = useState('');
@@ -26,12 +33,48 @@ function ScriptUploadModal(props) {
   const onChangePassword = (e) => setPassword(e.target.value);
 
   const [showMsg, setShowMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const isInputValid = () => author && password && title && desc && video && script;
+
+  const pushFileToStorage = async () => {
+    const uniquePath = uniqueIdGenerator();
+
+    const scriptInfoRef = fbStorage.ref().child('scriptInfo').child(uniquePath);
+    const scriptRef = scriptInfoRef.child('script');
+    const videoRef = scriptInfoRef.child('video');
+    await scriptRef.child(script.name).put(script);
+    await videoRef.child(video.name).put(video);
+    return {
+      scriptPath: `scriptInfo/${uniquePath}/${script.name}`,
+      videoPath: `scriptInfo/${uniquePath}/${video.name}`,
+    };
+  };
+
+  const pushScript = async () => {
+    const scriptInfo = await pushFileToStorage();
+    const scriptDataRef = fbDatabase.ref('scriptData');
+    const newScriptDataRef = scriptDataRef.push();
+    await newScriptDataRef.set({
+      title,
+      author,
+      password: pwdEncrypt(password),
+      desc,
+      scriptInfo,
+    });
+  };
+
+  const sendQuery = async () => {
+    setIsLoading(true);
+    await pushScript();
+    setIsLoading(false);
+    toggle();
+  };
 
   const successHandler = () => {
     if (isInputValid()) {
       setShowMsg('');
+      sendQuery();
     } else {
       const notifyArray = [];
       if (!title) notifyArray.push('제목');
@@ -120,6 +163,21 @@ function ScriptUploadModal(props) {
         <Button color="primary" onClick={successHandler}>업로드</Button>
         <Button color="danger" onClick={toggle}>닫기</Button>
       </div>
+      {isLoading && (
+        <>
+          <div className="scriptModal__loader">
+            <span>D</span>
+            <span>a</span>
+            <span>g</span>
+            <span>a</span>
+            <span>t</span>
+            <span>h</span>
+            <span>e</span>
+            <span>r</span>
+          </div>
+          <div className="blackMask" />
+        </>
+      )}
     </div>
   );
 }
