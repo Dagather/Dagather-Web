@@ -57,6 +57,11 @@
       margin-right: 1rem;
     }
   }
+
+  &__warnMsg {
+    margin: 0.5rem auto;
+    color: red;
+  }
 }
 
 .script-modal {
