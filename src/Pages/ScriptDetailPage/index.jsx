@@ -16,7 +16,7 @@ import CDU from 'Utils/create-download-url';
 import communityBg from 'Assets/img/background/community.jpg';
 import share from 'Assets/img/icon/share.svg';
 import download from 'Assets/img/icon/download_white.svg';
-import leftArrow from 'Assets/img/icon/leftArrow.svg';
+import leftArrow from 'Assets/img/icon/leftArrow_white.svg';
 
 function ScriptDetailPage({ match }) {
   const fbDatabase = database();

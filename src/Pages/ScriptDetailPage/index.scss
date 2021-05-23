@@ -1,26 +1,32 @@
 .scriptDetailPage {
-  position: relative;
   display: flex;
   flex-direction: column;
 
   min-height: 500px;
 
   margin-top: 3rem;
-  padding: 1rem;
 
-  border: 1px solid black;
+  border: 3px solid lightseagreen;
   border-radius: 18px;
   box-shadow: 5px 5px 5px lightgray;
 
   font-family: 'IBMPlexSansKR-Regular';
 
+  overflow: hidden;
+
   &__header {
+    position: relative;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: lightseagreen;
+    color: white;
+    padding: 1rem;
+
     &-title {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-family: 'IBMPlexSansKR-Bold';
     }
 
@@ -32,8 +38,8 @@
       all: unset;
 
       position: absolute;
-      top: 1rem;
       left: 1rem;
+      transform: translateY(-50%);
     }
   }
 
@@ -53,7 +59,9 @@
       align-items: center;
     }
     &-label {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
     }
 
     & iframe {
@@ -66,7 +74,7 @@
   &__footer {
     display: flex;
     width: 50%;
-    margin: auto;
+    margin: 2.5rem auto;
     justify-content: center;
     &-btnContainer {
       all: unset;
