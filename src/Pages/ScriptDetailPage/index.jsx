@@ -1,12 +1,17 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/media-has-caption */
+import React, { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { useHistory } from 'react-router-dom';
+
+import { database, storage } from 'Config/firebaseConfig';
 
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
+
+import CDU from 'Utils/create-download-url';
 
 import communityBg from 'Assets/img/background/community.jpg';
 import thumb from 'Assets/img/icon/thumb_white.svg';
@@ -14,15 +19,40 @@ import share from 'Assets/img/icon/share.svg';
 import download from 'Assets/img/icon/download_white.svg';
 import leftArrow from 'Assets/img/icon/leftArrow.svg';
 
-function ScriptDetailPage(props) {
+function ScriptDetailPage({ match }) {
+  const fbDatabase = database();
+  const fbStorage = storage();
   const history = useHistory();
-  const { scriptId } = props;
-  console.log(scriptId);
-
+  const { scriptId } = match.params;
   const goBack = () => {
     history.goBack();
   };
 
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [desc, setDesc] = useState('');
+  const [likeNum, setLikeNum] = useState(0);
+  const [scriptPath, setScriptPath] = useState(null);
+  const [videoPath, setVideoPath] = useState(null);
+  const fetchValues = () => {
+    fbDatabase.ref('scriptData').child(scriptId).get().then(async (snapshot) => {
+      if (snapshot.exists()) {
+        const { title: t, author: a, desc: d, likeNum: l, scriptInfo: s } = snapshot.val();
+        setTitle(t);
+        setAuthor(a);
+        setDesc(d);
+        setLikeNum(l);
+        const { scriptPath: sPath, videoPath: vPath } = s;
+        setScriptPath(sPath);
+        const embededVideoPath = await fbStorage.ref().child(vPath).getDownloadURL();
+        setVideoPath(embededVideoPath);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (scriptId) fetchValues();
+  }, [scriptId]);
   return (
     <>
       <NavBar />
@@ -31,10 +61,10 @@ function ScriptDetailPage(props) {
         <div className="scriptDetailPage">
           <div className="scriptDetailPage__header">
             <div className="scriptDetailPage__header-title">
-              OCR을 활용한 COVID-19 출입자명부 추출 로봇
+              {title}
             </div>
             <div className="scriptDetailPage__header-author">
-              made by. 권혁진
+              {`made by. ${author}`}
             </div>
             <button
               type="button"
@@ -49,28 +79,33 @@ function ScriptDetailPage(props) {
               <div className="scriptDetailPage__content-label">
                 로봇 상세정보
               </div>
-              {`이 로봇은 무료로 코로나 명부를 엑셀 파일로 추출해줍니다.
-              
-              OCR을 활용해 문자인식해 사용자 손수 작업량을 줄여줍니다.`}
+              {desc}
             </div>
             <div className="scriptDetailPage__content-cont">
               <div className="scriptDetailPage__content-label">
                 로봇 실행영상
               </div>
-              <iframe title="tmp" src="https://www.youtube.com/embed/u2LsOuztwsw" frameBorder="0" />
+              <video controls width="70%" muted>
+                {videoPath && (
+                  <>
+                    <source src={videoPath} type="video/mp4" />
+                    동영상 로드 중 문제가 발생했습니다.
+                  </>
+                )}
+              </video>
             </div>
           </div>
           <div className="scriptDetailPage__footer">
             <button type="button" className="scriptDetailPage__footer-btnContainer">
               <img src={thumb} alt="add_like" />
-              <span>121</span>
+              <span>{likeNum}</span>
             </button>
 
             <button type="button" className="scriptDetailPage__footer-btnContainer middle">
               <img src={share} alt="share_btn" />
             </button>
 
-            <button type="button" className="scriptDetailPage__footer-btnContainer">
+            <button type="button" className="scriptDetailPage__footer-btnContainer" onClick={() => CDU(scriptPath)}>
               <img src={download} alt="download_btn" />
             </button>
           </div>
@@ -82,7 +117,7 @@ function ScriptDetailPage(props) {
 }
 
 ScriptDetailPage.propTypes = {
-  scriptId: PropTypes.string.isRequired,
+  match: ReactRouterPropTypes.match.isRequired,
 };
 
 export default ScriptDetailPage;

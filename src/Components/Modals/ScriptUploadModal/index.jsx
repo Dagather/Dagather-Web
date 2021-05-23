@@ -46,8 +46,8 @@ function ScriptUploadModal(props) {
     await scriptRef.child(script.name).put(script);
     await videoRef.child(video.name).put(video);
     return {
-      scriptPath: `scriptInfo/${uniquePath}/${script.name}`,
-      videoPath: `scriptInfo/${uniquePath}/${video.name}`,
+      scriptPath: `scriptInfo/${uniquePath}/script/${script.name}`,
+      videoPath: `scriptInfo/${uniquePath}/video/${video.name}`,
     };
   };
 

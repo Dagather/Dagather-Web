@@ -51,6 +51,7 @@ function ScriptPage() {
       title={robot.title}
       author={robot.author}
       likeNum={robot.likeNum}
+      id={robot.id}
       color={needSort ? 'normal' : 'light'}
     />);
   };

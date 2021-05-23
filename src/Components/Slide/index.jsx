@@ -76,13 +76,13 @@ const Footer = styled.div`
 
 function Slide(props) {
   const history = useHistory();
-  const { title, author, likeNum, color } = props;
+  const { title, author, likeNum, color, id } = props;
   const [onHover, setOnHover] = useState(false);
   const toggle = () => setOnHover(!onHover);
 
   const pushToRobotDetail = () => {
     history.push({
-      pathname: '/script/1',
+      pathname: `/script/${id}`,
     });
   };
 
@@ -110,6 +110,7 @@ function Slide(props) {
 }
 
 Slide.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   likeNum: PropTypes.number.isRequired,
