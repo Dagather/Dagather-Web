@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { darken } from 'polished';
 
 import download from 'Assets/img/icon/download.svg';
 
@@ -25,7 +24,7 @@ const Elem = styled.div`
     box-shadow: 4px 4px 4px lightgray;
 
     &:hover {
-      background-color: ${(props) => darken(0.15, props.color === 'light' ? '#4cc2bb' : 'lightseagreen')};
+      background-color: ${(props) => (props.color === 'light' ? '#31908b' : '#14716c')};
       transform: scale(1.05);
       transition: transform 300ms ease;
     }
