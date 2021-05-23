@@ -14,7 +14,6 @@ import Footer from 'Components/Footer';
 import CDU from 'Utils/create-download-url';
 
 import communityBg from 'Assets/img/background/community.jpg';
-import thumb from 'Assets/img/icon/thumb_white.svg';
 import share from 'Assets/img/icon/share.svg';
 import download from 'Assets/img/icon/download_white.svg';
 import leftArrow from 'Assets/img/icon/leftArrow.svg';
@@ -31,23 +30,40 @@ function ScriptDetailPage({ match }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [desc, setDesc] = useState('');
-  const [likeNum, setLikeNum] = useState(0);
+  const [downloadCount, setDownloadCount] = useState(0);
   const [scriptPath, setScriptPath] = useState(null);
   const [videoPath, setVideoPath] = useState(null);
   const fetchValues = () => {
     fbDatabase.ref('scriptData').child(scriptId).get().then(async (snapshot) => {
       if (snapshot.exists()) {
-        const { title: t, author: a, desc: d, likeNum: l, scriptInfo: s } = snapshot.val();
+        const { title: t, author: a, desc: d, downloadCount: dc, scriptInfo: s } = snapshot.val();
         setTitle(t);
         setAuthor(a);
         setDesc(d);
-        setLikeNum(l);
+        setDownloadCount(dc);
         const { scriptPath: sPath, videoPath: vPath } = s;
         setScriptPath(sPath);
         const embededVideoPath = await fbStorage.ref().child(vPath).getDownloadURL();
         setVideoPath(embededVideoPath);
       }
     });
+  };
+
+  const increaseDownloadCountWithTransaction = () => {
+    fbDatabase.ref('scriptData').child(scriptId).transaction((script) => {
+      if (script) {
+        return {
+          ...script,
+          downloadCount: script.downloadCount + 1,
+        };
+      } return null;
+    });
+  };
+
+  const onClickDownload = () => {
+    setDownloadCount(downloadCount + 1); // provide immediate result to user interface
+    CDU(scriptPath);
+    increaseDownloadCountWithTransaction();
   };
 
   useEffect(() => {
@@ -96,17 +112,13 @@ function ScriptDetailPage({ match }) {
             </div>
           </div>
           <div className="scriptDetailPage__footer">
-            <button type="button" className="scriptDetailPage__footer-btnContainer">
-              <img src={thumb} alt="add_like" />
-              <span>{likeNum}</span>
-            </button>
-
             <button type="button" className="scriptDetailPage__footer-btnContainer middle">
               <img src={share} alt="share_btn" />
             </button>
 
-            <button type="button" className="scriptDetailPage__footer-btnContainer" onClick={() => CDU(scriptPath)}>
+            <button type="button" className="scriptDetailPage__footer-btnContainer" onClick={onClickDownload}>
               <img src={download} alt="download_btn" />
+              <span>{downloadCount}</span>
             </button>
           </div>
         </div>

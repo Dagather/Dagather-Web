@@ -61,7 +61,7 @@ function ScriptUploadModal(props) {
       password: pwdEncrypt(password),
       desc,
       scriptInfo,
-      likeNum: 0,
+      downloadCount: 0,
     });
   };
 

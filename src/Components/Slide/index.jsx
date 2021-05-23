@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-import thumb from 'Assets/img/icon/thumb.svg';
+import download from 'Assets/img/icon/download.svg';
 
 const Elem = styled.div`
     background-color: ${(props) => (props.color === 'light' ? '#4cc2bb' : 'lightseagreen')};
@@ -47,21 +47,21 @@ const Author = styled(Text)`
 
   `;
 
-const LikeContainer = styled.div`
+const DownloadContainer = styled.div`
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 12px;
     background-color: white;
   `;
 
-const Like = styled.img`
+const Download = styled.img`
     width: 1.5rem;
     height: 1.5rem;
     margin-right: 1rem;
   `;
 
-const LikeNum = styled.span`
+const DownloadCount = styled.span`
     color: white;
     font-family: 'IBMPlexSansKR-Regular';
     font-size: 1.5rem;
@@ -76,7 +76,7 @@ const Footer = styled.div`
 
 function Slide(props) {
   const history = useHistory();
-  const { title, author, likeNum, color, id } = props;
+  const { title, author, downloadCount, color, id } = props;
   const [onHover, setOnHover] = useState(false);
   const toggle = () => setOnHover(!onHover);
 
@@ -100,10 +100,10 @@ function Slide(props) {
         <Author>
           {author}
         </Author>
-        <LikeContainer>
-          <Like src={thumb} alt="like" />
-          <LikeNum>{likeNum}</LikeNum>
-        </LikeContainer>
+        <DownloadContainer>
+          <Download src={download} alt="like" />
+          <DownloadCount>{downloadCount}</DownloadCount>
+        </DownloadContainer>
       </Footer>
     </Elem>
   );
@@ -113,7 +113,7 @@ Slide.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  likeNum: PropTypes.number.isRequired,
+  downloadCount: PropTypes.number.isRequired,
   color: PropTypes.oneOf(['light', 'normal']).isRequired,
 };
 

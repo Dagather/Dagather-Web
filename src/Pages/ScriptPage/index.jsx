@@ -43,14 +43,14 @@ function ScriptPage() {
   const getRobotList = (needSort) => {
     const robotList = [...slides];
     if (needSort) {
-      robotList.sort((a, b) => b.likeNum - a.likeNum);
+      robotList.sort((a, b) => b.downloadCount - a.downloadCount);
       robotList.splice(5);
     }
     return robotList.map((robot) => <Slide
       key={robot.title}
       title={robot.title}
       author={robot.author}
-      likeNum={robot.likeNum}
+      downloadCount={robot.downloadCount}
       id={robot.id}
       color={needSort ? 'normal' : 'light'}
     />);
