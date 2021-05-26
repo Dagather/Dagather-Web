@@ -14,3 +14,22 @@
     }
   }
 }
+
+.jobAlert {
+  position: absolute !important;
+  top: 10%;
+  right: 3%;
+
+  display: flex;
+  flex-direction: column;
+
+  &-alert {
+    margin-bottom: 1rem;
+    box-shadow: 1px 1px 1px lightgrey;
+  }
+
+  @include ibmSans('Regular');
+  &__name {
+    font-weight: bolder;
+  }
+}

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import { getReleaseInfo, getRobotId, startJob } from 'Config/uipathConfig';
+import { getReleaseInfo, getRobotId, startJob, getJob } from 'Config/uipathConfig';
 
 import play from 'Assets/img/icon/play.svg';
 import pause from 'Assets/img/icon/pause.svg';
@@ -81,21 +81,70 @@ transform: translate(-50%, -50%);
 `;
 
 function RobotController(props) {
-  const { processName, isActive, author } = props;
+  const { processName, author, pushAlert } = props;
   const [isLoading, setIsLoading] = useState(false);
-  const startProcess = async () => {
-    setIsLoading(true);
-    const releaseInfo = await getReleaseInfo(processName);
-    if (releaseInfo) {
-      const { orgId, key } = releaseInfo;
-      const robotId = await getRobotId(orgId, 'mo_iz_to_@naver.com-unattended');
+  const [jobFinishChecker, setJobFinishChecker] = useState(null);
 
-      if (robotId) {
-        await startJob(orgId, key, robotId);
-      }
+  const isJobRunning = () => !!jobFinishChecker;
+
+  const pushAlertByRobot = (isSuccess, isFinished) => {
+    pushAlert({
+      name: processName,
+      isSuccess,
+      isFinished,
+    });
+  };
+
+  const startJobByRobot = async () => {
+    try {
+      const releaseInfo = await getReleaseInfo(processName);
+      if (releaseInfo) {
+        const { orgId, key } = releaseInfo;
+        const robotId = await getRobotId(orgId, 'mo_iz_to_@naver.com-unattended');
+
+        if (robotId) {
+          const jobInfo = await startJob(orgId, key, robotId);
+          if (jobInfo) {
+            const jobId = jobInfo.value[0].Id;
+            return {
+              jobId,
+              orgId,
+            };
+          }
+        }
+      } return null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const playBtnHandler = async () => {
+    setIsLoading(true);
+
+    const result = await startJobByRobot();
+    pushAlertByRobot(!!result, false);
+
+    if (result) {
+      const interval = setInterval(async () => {
+        const { jobId, orgId } = result;
+        const jobInfo = await getJob(jobId, orgId);
+        if (jobInfo) {
+          if (jobInfo.State === 'Successful') {
+            pushAlertByRobot(true, true);
+            clearInterval(interval);
+            setJobFinishChecker(null);
+          } else if (jobInfo.State === 'Faulted') {
+            pushAlertByRobot(false, false);
+            clearInterval(interval);
+            setJobFinishChecker(null);
+          }
+        }
+      }, 1000 * 15);
+      setJobFinishChecker(interval);
     }
     setIsLoading(false);
   };
+
   return (
     <>
       <Robot>
@@ -104,13 +153,15 @@ function RobotController(props) {
           <Author>{author}</Author>
         </LeftCont>
         <RightCont>
-          <Play onClick={startProcess}>
+          <Play onClick={playBtnHandler} isJobRunning={isJobRunning()}>
             <img src={play} alt="playBtn" />
           </Play>
-
-          <Pause disabled={!isActive}>
+          {isJobRunning() && (
+          <Pause>
             <img src={pause} alt="pauseBtn" />
           </Pause>
+          )}
+
         </RightCont>
         {isLoading && (
         <RobotSpinner>
@@ -124,8 +175,8 @@ function RobotController(props) {
 
 RobotController.propTypes = {
   processName: PropTypes.string.isRequired,
-  isActive: PropTypes.bool.isRequired,
   author: PropTypes.string.isRequired,
+  pushAlert: PropTypes.func.isRequired,
 };
 
 export default RobotController;

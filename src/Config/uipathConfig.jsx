@@ -46,7 +46,6 @@ export const getProcesses = async () => {
     });
     if (response.status === 200) {
       const result = await response.json();
-      console.log(result);
       return result.value; // processes array.
     } return [];
   } catch (error) {
@@ -67,7 +66,6 @@ export const getReleaseInfo = async (processName) => {
 
     if (response.status === 200) {
       const result = await response.json();
-      console.log(result);
       const resultRelease = result.value.filter((release) => release.Name === processName);
       const { OrganizationUnitId: orgId, Key: key } = resultRelease[0];
       return {
@@ -127,8 +125,29 @@ export const startJob = async (orgId, releaseKey, robotId) => {
     });
 
     const result = await response.json();
-    console.log(result);
+    return result;
   } catch (error) {
     console.log(error);
+    return null;
+  }
+};
+
+export const getJob = async (jobId, orgId) => {
+  try {
+    const response = await fetch(`/odata/Jobs(${jobId})`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'Application/json',
+        Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+        'X-UIPATH-TenantName': tenantName,
+        'X-UIPATH-OrganizationUnitId': orgId,
+      },
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 };

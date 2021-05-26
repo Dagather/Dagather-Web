@@ -11,15 +11,54 @@ import { getProcesses } from 'Config/uipathConfig';
 
 import tableBg from 'Assets/img/background/table.jpg';
 
+import { UncontrolledAlert } from 'reactstrap';
+
 function RobotPage() {
+  const [alertList, setAlertList] = useState([]);
+  const pushAlert = (elem) => {
+    setAlertList((prevAlertList) => [...prevAlertList, elem]);
+  };
+
   const [isLoading, setIsLoading] = useState(false);
   const [processList, setProcessList] = useState([]);
   const showProcessList = () => processList.map((process) => <RobotController
-    isActive={process.IsActive}
     author={process.Authors}
     processName={process.Title}
     key={process.Key}
+    pushAlert={(t) => pushAlert(t)}
   />);
+
+  const getAlertColor = (isSuccess, isFinished) => {
+    if (isSuccess && isFinished) return 'info';
+    if (isSuccess) return 'success';
+    return 'danger';
+  };
+
+  const getAlertMsg = (isSuccess, isFinished) => {
+    if (isSuccess && isFinished) return ' : Successfully Finished.';
+    if (isSuccess) return ' : Job is proceeding...';
+    return ' : Fail to finsh job successfully.';
+  };
+
+  const showAlertList = () => (
+    <div className="jobAlert">
+      {
+          alertList.map((alert) => (
+            <UncontrolledAlert
+              color={getAlertColor(alert.isSuccess, alert.isFinished)}
+              className="jobAlert-alert"
+            >
+              <span className="jobAlert__name">
+                {alert.name}
+              </span>
+              <span className="jobAlert__desc">
+                {getAlertMsg(alert.isSuccess, alert.isFinished)}
+              </span>
+            </UncontrolledAlert>
+          ))
+        }
+    </div>
+  );
 
   useEffect(() => {
     async function loadProcess() {
@@ -44,6 +83,7 @@ function RobotPage() {
         </div>
       </div>
       <Footer />
+      {alertList.length > 0 && showAlertList()}
       {isLoading && <Loader />}
     </>
   );
