@@ -6,6 +6,7 @@ import Footer from 'Components/Footer';
 import Slide from 'Components/Slide';
 
 import ScriptUploadModal from 'Components/Modals/ScriptUploadModal';
+import Loader from 'Components/Loader';
 
 import { database } from 'Config/firebaseConfig';
 
@@ -19,10 +20,12 @@ function ScriptPage() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [slides, setSlides] = useState([]);
 
-  const fetchScript = () => {
-    fbDatabase.ref('scriptData').on('value', (snapshot) => {
+  const fetchScript = async () => {
+    await fbDatabase.ref('scriptData').on('value', (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const dataToArray = Object.entries(data); // 0: index, 1: value
@@ -37,7 +40,12 @@ function ScriptPage() {
   };
 
   useEffect(() => {
-    fetchScript();
+    async function fetchScriptInEffect() {
+      setIsLoading(true);
+      await fetchScript();
+      setIsLoading(false);
+    }
+    fetchScriptInEffect();
   }, []);
 
   const getRobotList = (needSort) => {
@@ -87,6 +95,7 @@ function ScriptPage() {
       <Modal isOpen={isOpen} toggle={toggle} className="script-modal">
         <ScriptUploadModal toggle={toggle} />
       </Modal>
+      {isLoading && <Loader />}
     </>
   );
 }

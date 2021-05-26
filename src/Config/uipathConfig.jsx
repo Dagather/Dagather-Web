@@ -1,17 +1,14 @@
-export default function uipathConfig() {
-  const ENV = process.env;
-  const {
-    REACT_APP_UP_CLIENT_ID: clientId,
-    REACT_APP_UP_USER_KEY: userKey,
-    REACT_APP_UP_TENANT_NAME: tenantName,
-  } = ENV;
+const ENV = process.env;
+const {
+  REACT_APP_UP_CLIENT_ID: clientId,
+  REACT_APP_UP_USER_KEY: userKey,
+  REACT_APP_UP_TENANT_NAME: tenantName,
+} = ENV;
 
-  async function getToken() {
-    // 인증 api는 https://account.uipath.com
-    // 나머지는 https://cloud.uipath.com
-    // access_token은 localStorage에 저장.
-    // access_token의 만료기간 고려하여 로컬스토리지 만료 값 설정 필요.
-
+// store token to localstorage
+// by using this token, Can authorize
+export const getToken = async () => {
+  try {
     const response = await fetch('/oauth/token', {
       method: 'POST',
       headers: {
@@ -25,25 +22,21 @@ export default function uipathConfig() {
       }),
     });
 
-    const result = await response.json();
-    const { access_token: accessToken } = result;
-    window.localStorage.setItem('access_token', accessToken);
+    if (response.status === 200) {
+      const result = await response.json();
+      const { access_token: accessToken } = result;
+      window.localStorage.setItem('access_token', accessToken);
+
+      console.log('success');
+    }
+  } catch (err) {
+    console.log(err);
   }
+};
 
-  async function getLicense() {
-    const response = await fetch('/odata/Settings/UiPath.Server.Configuration.OData.GetLicense', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
-        'X-UIPATH-TenantName': tenantName,
-      },
-    });
-
-    const result = await response.json();
-    console.log(result);
-  }
-
-  async function getProcesses() {
+// return processes array
+export const getProcesses = async () => {
+  try {
     const response = await fetch('/odata/Processes', {
       method: 'GET',
       headers: {
@@ -51,16 +44,91 @@ export default function uipathConfig() {
         'X-UIPATH-TenantName': tenantName,
       },
     });
+    if (response.status === 200) {
+      const result = await response.json();
+      console.log(result);
+      return result.value; // processes array.
+    } return [];
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getReleaseInfo = async (processName) => {
+  try {
+    const response = await fetch('/odata/Releases', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+        'X-UIPATH-TenantName': tenantName,
+      },
+    });
+
+    if (response.status === 200) {
+      const result = await response.json();
+      console.log(result);
+      const resultRelease = result.value.filter((release) => release.Name === processName);
+      const { OrganizationUnitId: orgId, Key: key } = resultRelease[0];
+      return {
+        orgId,
+        key,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getRobotId = async (orgId, robotName) => {
+  try {
+    const response = await fetch('/odata/Sessions/UiPath.Server.Configuration.OData.GetGlobalSessions?$expand=Robot($expand=License)', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+        'X-UIPATH-TenantName': tenantName,
+        'X-UIPATH-ORGANIZATIONUNITID': orgId,
+      },
+    });
+    if (response.status === 200) {
+      const result = await response.json();
+      const selectedRobot = result.value.filter((robot) => robot.Robot.Name === robotName);
+      return selectedRobot[0].Robot.Id;
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const startJob = async (orgId, releaseKey, robotId) => {
+  try {
+    const response = await fetch('/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+        Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+        'X-UIPATH-TenantName': tenantName,
+        'X-UIPATH-OrganizationUnitId': orgId,
+      },
+      body: JSON.stringify({
+        startInfo: {
+          ReleaseKey: releaseKey, // ReleaseKey: getRelease()'s result.value[idx].Key
+          Strategy: 'Specific',
+          RobotIds: [robotId], // RobotIds: getRobots()'s result.value[idx].Robot.Id
+          Source: 'Manual',
+          JobPriority: 'Normal',
+          InputArguments: '{}',
+        },
+      }),
+    });
 
     const result = await response.json();
     console.log(result);
+  } catch (error) {
+    console.log(error);
   }
-
-  async function doConfig() {
-    await getToken();
-    await getLicense();
-    await getProcesses();
-  }
-
-  doConfig();
-}
+};
