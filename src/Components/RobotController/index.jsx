@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import { getReleaseInfo, getRobotId, startJob, getJob } from 'Config/uipathConfig';
+import { getReleaseInfo, getRobotId, startJob, getJob, stopJob } from 'Config/uipathConfig';
 
 import play from 'Assets/img/icon/play.svg';
 import pause from 'Assets/img/icon/pause.svg';
@@ -84,14 +84,17 @@ function RobotController(props) {
   const { processName, author, pushAlert } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [jobFinishChecker, setJobFinishChecker] = useState(null);
+  const [robotOrgId, setRobotOrgId] = useState(null);
+  const [runningJobId, setRunningJobId] = useState(null);
 
   const isJobRunning = () => !!jobFinishChecker;
 
-  const pushAlertByRobot = (isSuccess, isFinished) => {
+  const pushAlertByRobot = (isSuccess, isFinished, isStopped) => {
     pushAlert({
       name: processName,
       isSuccess,
       isFinished,
+      isStopped,
     });
   };
 
@@ -100,12 +103,14 @@ function RobotController(props) {
       const releaseInfo = await getReleaseInfo(processName);
       if (releaseInfo) {
         const { orgId, key } = releaseInfo;
+        setRobotOrgId(orgId);
         const robotId = await getRobotId(orgId, 'mo_iz_to_@naver.com-unattended');
 
         if (robotId) {
           const jobInfo = await startJob(orgId, key, robotId);
           if (jobInfo) {
             const jobId = jobInfo.value[0].Id;
+            setRunningJobId(jobId);
             return {
               jobId,
               orgId,
@@ -122,7 +127,7 @@ function RobotController(props) {
     setIsLoading(true);
 
     const result = await startJobByRobot();
-    pushAlertByRobot(!!result, false);
+    pushAlertByRobot(!!result, false, false);
 
     if (result) {
       const interval = setInterval(async () => {
@@ -130,17 +135,29 @@ function RobotController(props) {
         const jobInfo = await getJob(jobId, orgId);
         if (jobInfo) {
           if (jobInfo.State === 'Successful') {
-            pushAlertByRobot(true, true);
+            pushAlertByRobot(true, true, false);
             clearInterval(interval);
             setJobFinishChecker(null);
           } else if (jobInfo.State === 'Faulted') {
-            pushAlertByRobot(false, false);
+            pushAlertByRobot(false, false, false);
+            clearInterval(interval);
+            setJobFinishChecker(null);
+          } else if (jobInfo.State === 'Stopped') {
+            pushAlertByRobot(false, false, true);
             clearInterval(interval);
             setJobFinishChecker(null);
           }
         }
       }, 1000 * 15);
       setJobFinishChecker(interval);
+    }
+    setIsLoading(false);
+  };
+
+  const pauseBtnHandler = async () => {
+    setIsLoading(true);
+    if (runningJobId && robotOrgId) {
+      await stopJob(runningJobId, robotOrgId);
     }
     setIsLoading(false);
   };
@@ -157,7 +174,7 @@ function RobotController(props) {
             <img src={play} alt="playBtn" />
           </Play>
           {isJobRunning() && (
-          <Pause>
+          <Pause onClick={pauseBtnHandler}>
             <img src={pause} alt="pauseBtn" />
           </Pause>
           )}

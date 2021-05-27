@@ -151,3 +151,23 @@ export const getJob = async (jobId, orgId) => {
     return null;
   }
 };
+
+export const stopJob = async (jobId, orgId) => {
+  try {
+    const response = await fetch(`/odata/Jobs(${jobId})/UiPath.Server.Configuration.OData.StopJob`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+        Authorization: `Bearer ${window.localStorage.getItem('access_token')}`,
+        'X-UIPATH-TenantName': tenantName,
+        'X-UIPATH-OrganizationUnitId': orgId,
+      },
+      body: JSON.stringify({
+        strategy: '2',
+      }),
+    });
+    if (response.status === 200) console.log('stopped');
+  } catch (error) {
+    console.log(error);
+  }
+};

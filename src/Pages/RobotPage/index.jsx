@@ -34,9 +34,10 @@ function RobotPage() {
     return 'danger';
   };
 
-  const getAlertMsg = (isSuccess, isFinished) => {
+  const getAlertMsg = (isSuccess, isFinished, isStopped) => {
     if (isSuccess && isFinished) return ' : Successfully Finished.';
     if (isSuccess) return ' : Job is proceeding...';
+    if (isStopped) return ' : Job is stopped.';
     return ' : Fail to finsh job successfully.';
   };
 
@@ -52,7 +53,7 @@ function RobotPage() {
                 {alert.name}
               </span>
               <span className="jobAlert__desc">
-                {getAlertMsg(alert.isSuccess, alert.isFinished)}
+                {getAlertMsg(alert.isSuccess, alert.isFinished, alert.isStopped)}
               </span>
             </UncontrolledAlert>
           ))
