@@ -1,60 +1,49 @@
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable no-unused-vars */
 import React from 'react';
 
 import NavBar from 'Components/NavBar';
 import MainTab from 'Components/MainTab';
-import Tab from 'Components/MainTab/Tab';
 
 import uipathlogo from 'Assets/img/logo/uipath-logo.jpeg';
-import aboutpageText from 'Constants/aboutpage-text';
 import aboutpageMember from 'Constants/aboutpage-members';
 
 import reactLogo from 'Assets/img/logo/react-logo.jpeg';
 import firebaseLogo from 'Assets/img/logo/firebase-logo.jpeg';
-import projectReport from 'Assets/pdf/capstonereport.pdf';
-
+import gitHubLogo from 'Assets/img/logo/github.svg';
+import gMailLogo from 'Assets/img/logo/gmail.svg';
 
 function AboutPage() {
-  const uiPathImage = <img src={uipathlogo} alt={uipathlogo} />;
-  const getText = () => (
-    aboutpageText.map((text, index) => (
-      <Tab title={!index && uiPathImage} key={text[2]}>
-        <>
-          {text[0]}
-        </>
-      </Tab>
-    )));
-
   const getMember = () => (
-    aboutpageMember.map((text, index) => (
-      <Tab title={text[0]} key={text[1]}>
-        <>
-          <li>{text[1]}</li>
-          <li>{text[2]}</li>
-        </>
-      </Tab>
+    aboutpageMember.map((text) => (
+      <>
+        <div className="aboutPage__members">
+          <h2>{text[0]}</h2>
+          <br />
+          <div>
+            <a href={text[1]}><img src={gitHubLogo} alt="github-logo" className="aboutPage__members__github" /></a>
+            <a href={text[2]}><img src={gMailLogo} alt="gmail-logo" className="aboutPage__members__mail" /></a>
+          </div>
+          <strong><p>{text[3]}</p></strong>
+        </div>
+      </>
     )));
-
-
-
-
   return (
     <>
       <NavBar />
-      <div className="container">
-        <div className="aboutPage">
-          <MainTab title="프로젝트 개요">
-            {getText()}
-          </MainTab>
-          <MainTab title="구성원">
-            {getMember()}
-          </MainTab>
-          <MainTab title="기술 스택">
+      <div className="aboutPage">
+        <MainTab title="구성원">
+          {getMember()}
+        </MainTab>
+        <MainTab className="aboutPage__tech" title="기술 스택">
+          <div className="aboutPage__tech__react">
             <img src={reactLogo} alt="react-Logo" />
-            <img src={firebaseLogo} alt="react-Logo" />
-          </MainTab>
-        </div>
+          </div>
+          <div className="aboutPage__tech__firebase">
+            <img src={firebaseLogo} alt="firebase-Logo" />
+          </div>
+          <div className="aboutPage__tech__uipath">
+            <img src={uipathlogo} alt="uipath-Logo" />
+          </div>
+        </MainTab>
       </div>
       <footer>&copy; 2021, Dagather</footer>
     </>
