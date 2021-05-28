@@ -1,0 +1,12 @@
+.commentBlock {
+  border: 5px black;
+  border-radius: 5px;
+
+  &__buttons {
+    position: relative;
+    left: 725px;
+    button:first-child {
+      margin-right: 1rem;
+    }
+  }
+}
