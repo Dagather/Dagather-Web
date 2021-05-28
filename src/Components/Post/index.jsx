@@ -1,29 +1,14 @@
-/* eslint-disable no-console */
-/* eslint-disable no-return-assign */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-shadow */
-/* eslint-disable react/no-this-in-sfc */
-/* eslint-disable arrow-parens */
-/* eslint-disable camelcase */
-/* eslint-disable no-sequences */
-/* eslint-disable no-undef */
-/* eslint-disable comma-spacing */
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
 import { useHistory } from 'react-router-dom';
+import pwdEncrypt from 'Utils/encrypt-decrypt-password';
 
 import GoBackButton from 'Components/Button/GoBackButton';
 import WarnModal from 'Components/Modals/WarnModal';
 import PostModal from 'Components/Modals/PostModal';
 import CommentBlock from 'Components/Comments';
-
-import CommentsBlock from 'simple-react-comments';
 
 import { database, storage } from 'Config/firebaseConfig';
 
@@ -34,7 +19,6 @@ import CDU from 'Utils/create-download-url';
 
 import { Button } from 'reactstrap';
 import { Input } from '@material-ui/core';
-import commentsData from '../../Constants/commentsData';
 
 function Post(props) {
   const history = useHistory();
@@ -42,8 +26,7 @@ function Post(props) {
   const fbStorage = storage();
   const { values, postId } = props;
 
-  // eslint-disable-next-line max-len
-  const { author, category, content, title, created_at: createdAt, file, comment_author: commentAuthor, comment_created_at: commentCreatedAt, comment_password: commentPassword, comment_content: commentContent } = values;
+  const { author, category, content, title, created_at: createdAt, file } = values;
   const { path } = file;
   const optionMapper = { 1: '업로드', 2: '수정', 3: '기타' };
 
@@ -55,12 +38,59 @@ function Post(props) {
 
   const [isRmConfirm, setIsRmConfirm] = useState(false);
   const [isEditConfirm, setIsEditConfirm] = useState(false);
+  const [isCommentChange, setIsCommentChange] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [filePathForEdit, setFilePathForEdit] = useState(null);
   const [fileName, setFileName] = useState('');
 
-  const [comments] = useState(commentsData);
+  // const [prevSnapshot, setPrevSnapshot] = useState(null);
+  const [commentList, setCommentList] = useState([]);
 
+  const [commentContent, setCommentContent] = useState('');
+  const commentContentHandler = (e) => {
+    setCommentContent(e.target.value);
+  };
+
+  const [commentPassword, setCommentPassword] = useState('');
+  const commentPwHandler = (e) => {
+    setCommentPassword(e.target.value);
+  };
+  const [commentAuthor, setCommentAuthor] = useState('');
+  const commentAuthorHandler = (e) => {
+    setCommentAuthor(e.target.value);
+  };
+
+  const parseDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = `0${1 + date.getMonth()}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    const hour = `0${date.getHours()}`.slice(-2);
+    const minute = `0${date.getMinutes()}`.slice(-2);
+
+    return `${year}-${month}-${day} ${hour}:${minute}`;
+  };
+
+  const pushComment = async () => {
+    const commentRef = fbDatabase.ref(`posts/${postId}/comments`);
+    const newCommentRef = commentRef.push();
+    await newCommentRef.set({
+      commentAuthor,
+      commentContent,
+      commentPassword: pwdEncrypt(commentPassword),
+      comment_created_at: parseDate(),
+    });
+  };
+  const sendQuery = async () => {
+    pushComment();
+  };
+
+  const isInputValid = () => commentAuthor && commentPassword && commentContent && (commentContent !== '<p><br></p>');
+  const successHandler = () => {
+    if (isInputValid()) {
+      sendQuery();
+    }
+  };
   const getFileName = () => {
     if (path && !filePathForEdit) {
       const rootRef = fbStorage.ref();
@@ -78,6 +108,40 @@ function Post(props) {
   useEffect(() => {
     if (isEditConfirm) setEditMode(true);
   }, [isEditConfirm]);
+
+  const fetchCommentList = () => {
+    fbDatabase.ref(`posts/${postId}/comments`).on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const keyList = Object.keys(data);
+        const fetchedCommentList = Object.values(data).map((comment, index) => ({
+          ...comment,
+          id: keyList[index],
+          postId,
+        }));
+        setCommentList(fetchedCommentList);
+      } else {
+        setCommentList([]);
+      }
+    });
+  };
+
+  const getComments = () => {
+    // eslint-disable-next-line max-len
+    const result = commentList.map((val) => <CommentBlock commentChange={setIsCommentChange} postId={val.postId} commentId={val.id} author={val.commentAuthor} content={val.commentContent} createdAt={val.comment_created_at} />);
+    return result;
+  };
+
+  useEffect(() => {
+    fetchCommentList();
+  }, []);
+
+  useEffect(() => {
+    if (isCommentChange) {
+      fetchCommentList();
+      setIsCommentChange(false);
+    }
+  }, [isCommentChange]);
 
   return (
     <>
@@ -146,14 +210,23 @@ function Post(props) {
           </div>
           <hr />
           <div className="post__comment">
-            <Input className="post__comment__author" type="text" placeholder="작성자" />
-            <Input className="post__comment__password" type="password" placeholder="비밀번호" />
-            <Input className="post__comment__content" type="textarea" placeholder="내용" />
-            <Button>작성</Button>
+            <div className="post__comment_write__tabs">
+              <h3>댓글 작성</h3>
+            </div>
+            <div className="post__comment__data">
+              <Input className="post__comment__data__author" type="text" placeholder="작성자" value={commentAuthor} onChange={commentAuthorHandler} />
+              <Input className="post__comment__data__password" type="password" placeholder="비밀번호" value={commentPassword} onChange={commentPwHandler} />
+            </div>
+            <div className="post__comment__content">
+              <Input className="post__comment__content__input" type="textarea" multiline fullWidth placeholder="댓글을 입력해주세요." name={commentContent} value={commentContent} onChange={commentContentHandler} margin="none" />
+            </div>
+            <Button className="post__comment__save" color="success" onClick={successHandler}>작성</Button>
+            <div className="post__comment__list__tabs">
+              <h3>댓글 목록</h3>
+            </div>
           </div>
-          <hr />
           <div className="post__comment__view">
-            <CommentBlock author={'제균'} content={'test....'} created_at={commentCreatedAt} />
+            {getComments()}
           </div>
         </div>
       )}
@@ -177,9 +250,6 @@ Post.propTypes = {
     content: PropTypes.node,
     created_at: PropTypes.string,
     title: PropTypes.string,
-    comment_author: PropTypes.string,
-    comment_created_at: PropTypes.string,
-    comment_content: PropTypes.string,
     file: PropTypes.shape({
       path: PropTypes.string,
     }),

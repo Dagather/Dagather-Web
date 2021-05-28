@@ -99,4 +99,28 @@
       }
     }
   }
+  &__comment {
+    &__write__tabs {
+      margin-bottom: 3rem;
+    }
+    &__data {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      &__author {
+        margin-right: 2rem;
+      }
+    }
+    &__content {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    &__save {
+      margin-top: 1rem;
+      position: relative;
+      left: 720px;
+    }
+    &__list__tabs {
+      margin-bottom: 3rem;
+    }
+  }
 }
