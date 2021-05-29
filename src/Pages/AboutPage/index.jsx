@@ -18,32 +18,38 @@ function AboutPage() {
         <div className="aboutPage__members">
           <h2>{text[0]}</h2>
           <br />
-          <div>
-            <a href={text[1]}><img src={gitHubLogo} alt="github-logo" className="aboutPage__members__github" /></a>
-            <a href={text[2]}><img src={gMailLogo} alt="gmail-logo" className="aboutPage__members__mail" /></a>
+          <div className="aboutPage__members-content">
+            <a href={text[1]}><img src={gitHubLogo} alt="github-logo" className="aboutPage__members-item" /></a>
+            <a href={text[2]}><img src={gMailLogo} alt="gmail-logo" className="aboutPage__members-item" /></a>
+            <strong><p>{text[3]}</p></strong>
+            <strong><p>{text[4]}</p></strong>
           </div>
-          <strong><p>{text[3]}</p></strong>
         </div>
       </>
     )));
   return (
     <>
       <NavBar />
-      <div className="aboutPage">
-        <MainTab title="구성원">
-          {getMember()}
-        </MainTab>
-        <MainTab className="aboutPage__tech" title="기술 스택">
-          <div className="aboutPage__tech__react">
-            <img src={reactLogo} alt="react-Logo" />
-          </div>
-          <div className="aboutPage__tech__firebase">
-            <img src={firebaseLogo} alt="firebase-Logo" />
-          </div>
-          <div className="aboutPage__tech__uipath">
-            <img src={uipathlogo} alt="uipath-Logo" />
-          </div>
-        </MainTab>
+      <div className="container">
+        <div className="aboutPage">
+          <MainTab title="구성원">
+            {getMember()}
+          </MainTab>
+          <MainTab className="aboutPage__tech" title="기술 스택">
+            <div className="aboutPage__tech__container">
+              <div className="aboutPage__tech-logo">
+                <img src={reactLogo} alt="react-Logo" />
+              </div>
+              <div className="aboutPage__tech-logo">
+                <img src={firebaseLogo} alt="firebase-Logo" />
+              </div>
+              <div className="aboutPage__tech-logo">
+                <img src={uipathlogo} alt="uipath-Logo" />
+              </div>
+            </div>
+
+          </MainTab>
+        </div>
       </div>
       <footer>&copy; 2021, Dagather</footer>
     </>
