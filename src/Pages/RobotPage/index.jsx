@@ -7,7 +7,7 @@ import MainTab from 'Components/MainTab';
 import Loader from 'Components/Loader';
 import RobotController from 'Components/RobotController';
 
-import { getProcesses } from 'Config/uipathConfig';
+import { getReleaseInfo } from 'Config/uipathConfig';
 
 import tableBg from 'Assets/img/background/table.jpg';
 
@@ -22,9 +22,10 @@ function RobotPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [processList, setProcessList] = useState([]);
   const showProcessList = () => processList.map((process) => <RobotController
-    author={process.Authors}
-    processName={process.Title}
+    processName={process.ProcessKey}
     key={process.Key}
+    version={process.ProcessVersion}
+    description={process.Description}
     pushAlert={(t) => pushAlert(t)}
   />);
 
@@ -64,7 +65,7 @@ function RobotPage() {
   useEffect(() => {
     async function loadProcess() {
       setIsLoading(true);
-      const pl = await getProcesses();
+      const pl = await getReleaseInfo();
       setProcessList(pl);
       setIsLoading(false);
     }

@@ -9,15 +9,15 @@ import { getReleaseInfo, getRobotId, startJob, getJob, stopJob } from 'Config/ui
 import play from 'Assets/img/icon/play.svg';
 import pause from 'Assets/img/icon/pause.svg';
 
-import { Spinner } from 'reactstrap';
+import { Spinner, Toast, ToastBody } from 'reactstrap';
 
 const Robot = styled.div`
 position: relative;
 background-color: ${(props) => (props.color === 'light' ? '#4cc2bb' : 'lightseagreen')};
-min-width: 30%;
+min-width: 45%;
 min-height: 130px;
 padding: 1rem;
-margin: 0.5rem;
+margin: 0.5rem 0.5rem 5rem 0.5rem;
 
 border-radius: 8px;
 
@@ -44,7 +44,7 @@ const Title = styled(Text)`
 font-size: 1.8rem;
 `;
 
-const Author = styled(Text)`
+const Version = styled(Text)`
 font-size: 1.5rem;
 font-family 'IBMPlexSansKR-Regular';
 `;
@@ -80,12 +80,21 @@ left: 50%;
 transform: translate(-50%, -50%);
 `;
 
+const ToastBox = styled.div`
+width: 100%;
+position: absolute;
+bottom: 10%;
+left: 55%;
+transform: translate(-50%, 100%) !important;
+`;
+
 function RobotController(props) {
-  const { processName, author, pushAlert } = props;
+  const { processName, pushAlert, version, description } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [jobFinishChecker, setJobFinishChecker] = useState(null);
   const [robotOrgId, setRobotOrgId] = useState(null);
   const [runningJobId, setRunningJobId] = useState(null);
+  const [isToastOpen, setIsToastOpen] = useState(false);
 
   const isJobRunning = () => !!jobFinishChecker;
 
@@ -164,10 +173,10 @@ function RobotController(props) {
 
   return (
     <>
-      <Robot>
+      <Robot onMouseEnter={() => setIsToastOpen(true)} onMouseLeave={() => setIsToastOpen(false)}>
         <LeftCont>
           <Title>{processName}</Title>
-          <Author>{author}</Author>
+          <Version>{version}</Version>
         </LeftCont>
         <RightCont>
           <Play onClick={playBtnHandler} isJobRunning={isJobRunning()}>
@@ -185,6 +194,17 @@ function RobotController(props) {
           <Spinner />
         </RobotSpinner>
         )}
+
+        {isToastOpen && (
+          <ToastBox>
+            <Toast>
+              <ToastBody>
+                {description}
+              </ToastBody>
+            </Toast>
+          </ToastBox>
+        )}
+
       </Robot>
     </>
   );
@@ -192,8 +212,9 @@ function RobotController(props) {
 
 RobotController.propTypes = {
   processName: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
   pushAlert: PropTypes.func.isRequired,
+  version: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 };
 
 export default RobotController;

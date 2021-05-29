@@ -66,12 +66,14 @@ export const getReleaseInfo = async (processName) => {
 
     if (response.status === 200) {
       const result = await response.json();
-      const resultRelease = result.value.filter((release) => release.Name === processName);
-      const { OrganizationUnitId: orgId, Key: key } = resultRelease[0];
-      return {
-        orgId,
-        key,
-      };
+      if (processName) {
+        const resultRelease = result.value.filter((release) => release.Name === processName);
+        const { OrganizationUnitId: orgId, Key: key } = resultRelease[0];
+        return {
+          orgId,
+          key,
+        };
+      } return result.value;
     }
     return null;
   } catch (error) {
