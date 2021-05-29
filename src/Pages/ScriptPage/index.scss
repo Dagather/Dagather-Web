@@ -12,8 +12,8 @@
   .slideChart {
     display: flex;
     flex-direction: row;
-    // flex-wrap: wrap;
     overflow-x: scroll;
+    scroll-behavior: smooth;
   }
 
   .robotList {

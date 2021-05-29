@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
@@ -16,6 +16,7 @@ import plus from 'Assets/img/icon/plus.svg';
 import { Modal } from 'reactstrap';
 
 function ScriptPage() {
+  const slideChartRef = useRef();
   const fbDatabase = database();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -39,6 +40,17 @@ function ScriptPage() {
     });
   };
 
+  const scrollHandler = (e) => {
+    e.preventDefault();
+    const target = slideChartRef.current;
+    const scrollPos = slideChartRef.current.scrollLeft;
+
+    target.scrollTo({
+      top: 0,
+      left: scrollPos - e.deltaY * 50,
+    });
+  };
+
   useEffect(() => {
     async function fetchScriptInEffect() {
       setIsLoading(true);
@@ -46,6 +58,12 @@ function ScriptPage() {
       setIsLoading(false);
     }
     fetchScriptInEffect();
+    if (slideChartRef && slideChartRef.current) {
+      slideChartRef.current.addEventListener('wheel', scrollHandler, { capture: true, passive: false });
+    }
+    return (
+      slideChartRef.current.removeEventListener('wheel', scrollHandler)
+    );
   }, []);
 
   const getRobotList = (needSort) => {
@@ -71,7 +89,7 @@ function ScriptPage() {
       <div className="container">
         <div className="scriptPage">
           <span className="header">Popular</span>
-          <div className="slideChart">
+          <div className="slideChart" ref={slideChartRef} onWheel={scrollHandler}>
             {getRobotList(true)}
           </div>
           <div className="robotList__header">
