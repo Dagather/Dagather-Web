@@ -1,30 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import NavBar from 'Components/NavBar';
 import Jumbotron from 'Components/Jumbotron';
 import Footer from 'Components/Footer';
-import Card from 'Components/Card';
-import SlateCard from 'Components/Card/SlateCard';
 import MainTab from 'Components/MainTab';
+import Loader from 'Components/Loader';
+import RobotController from 'Components/RobotController';
+
+import { getReleaseInfo } from 'Config/uipathConfig';
 
 import tableBg from 'Assets/img/background/table.jpg';
 
+import { UncontrolledAlert } from 'reactstrap';
+
 function RobotPage() {
-  const [selectedCard, selectCard] = useState('선택한 로봇에 대한 정보가 나타납니다.');
-  const tmpArray = ['1. 로봇1', '2. 로봇2', '3. 로봇3', '4. 로봇4',
-    '5. 로봇5', '6. 로봇6', '7. 로봇7', '8. 로봇8',
-    '9. 로봇9', '10. 로봇10'];
-  // Firebase 연동 이후, 로봇 스크립트 및 로봇 이름 받아오는 것 구현 이후에 재작성 예정.
-  const getCard = () => (
-    <>
-      <div className="robotPage__tabs">
-        {tmpArray.map((tmpTitle) => (
-          <Card key={tmpTitle[0]} title={tmpTitle} onClick={() => selectCard(tmpTitle)} />
-        ))}
-      </div>
-      <SlateCard name={selectedCard} />
-    </>
+  const [alertList, setAlertList] = useState([]);
+  const pushAlert = (elem) => {
+    setAlertList((prevAlertList) => [...prevAlertList, elem]);
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [processList, setProcessList] = useState([]);
+  const showProcessList = () => processList.map((process) => <RobotController
+    processName={process.ProcessKey}
+    key={process.Key}
+    version={process.ProcessVersion}
+    description={process.Description}
+    pushAlert={(t) => pushAlert(t)}
+  />);
+
+  const getAlertColor = (isSuccess, isFinished) => {
+    if (isSuccess && isFinished) return 'info';
+    if (isSuccess) return 'success';
+    return 'danger';
+  };
+
+  const getAlertMsg = (isSuccess, isFinished, isStopped) => {
+    if (isSuccess && isFinished) return ' : Successfully Finished.';
+    if (isSuccess) return ' : Job is proceeding...';
+    if (isStopped) return ' : Job is stopped.';
+    return ' : Fail to finsh job successfully.';
+  };
+
+  const showAlertList = () => (
+    <div className="jobAlert">
+      {
+          alertList.map((alert) => (
+            <UncontrolledAlert
+              color={getAlertColor(alert.isSuccess, alert.isFinished)}
+              className="jobAlert-alert"
+            >
+              <span className="jobAlert__name">
+                {alert.name}
+              </span>
+              <span className="jobAlert__desc">
+                {getAlertMsg(alert.isSuccess, alert.isFinished, alert.isStopped)}
+              </span>
+            </UncontrolledAlert>
+          ))
+        }
+    </div>
   );
+
+  useEffect(() => {
+    async function loadProcess() {
+      setIsLoading(true);
+      const pl = await getReleaseInfo();
+      setProcessList(pl);
+      setIsLoading(false);
+    }
+
+    loadProcess();
+  }, []);
+
   return (
     <>
       <NavBar />
@@ -32,11 +80,13 @@ function RobotPage() {
       <div className="container">
         <div className="robotPage">
           <MainTab title="로봇 리스트">
-            {getCard()}
+            {processList.length && showProcessList()}
           </MainTab>
         </div>
       </div>
       <Footer />
+      {alertList.length > 0 && showAlertList()}
+      {isLoading && <Loader />}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 
@@ -7,8 +7,9 @@ import Jumbotron from 'Components/Jumbotron';
 import MainTab from 'Components/MainTab';
 import Tab from 'Components/MainTab/Tab';
 import Footer from 'Components/Footer';
+import Loader from 'Components/Loader';
 
-import uiPathConfig from 'Config/uipathConfig';
+import { getToken } from 'Config/uipathConfig';
 
 import { serviceIntro, rpaIntro } from 'Constants/introduce-text';
 import { firstJumboTextInMain, secondJumboTextInMain } from 'Constants/jumbotron-text';
@@ -22,6 +23,8 @@ import secondBackground from 'Assets/img/background/sittingPeople.png';
 
 function Mainpage() {
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
+
   const getImgTag = (imgsrc, alt) => (
     <img src={imgsrc} alt={alt} />
   );
@@ -42,12 +45,18 @@ function Mainpage() {
     ))
   );
 
+  const connectUiPath = async () => {
+    setIsLoading(true);
+    await getToken();
+    setIsLoading(false);
+  };
+
   return (
     <>
       <NavBar />
       <Jumbotron
         backgroundSrc={firstBackground}
-        onClick={uiPathConfig}
+        onClick={connectUiPath}
         title={firstJumboTextInMain.title}
         content={firstJumboTextInMain.content}
         buttonName="Connect UiPath &nbsp;&nbsp; &gt;"
@@ -71,6 +80,7 @@ function Mainpage() {
         buttonName="Getting Started"
       />
       <Footer />
+      {isLoading && <Loader />}
     </>
   );
 }
