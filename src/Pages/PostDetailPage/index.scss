@@ -1,0 +1,16 @@
+.container {
+  margin: auto;
+  .postDetailPage {
+    margin-top: 5%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+
+    & hr {
+      width: 100%;
+      margin-inline-start: unset !important;
+      margin-inline-end: unset !important;
+    }
+  }
+}

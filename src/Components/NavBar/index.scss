@@ -17,8 +17,9 @@
     }
 
     &__col {
+      display: flex;
+      justify-content: flex-end;
       &__routeTab {
-        display: flex;
         &__navItem {
           display: flex;
           margin: 0 1rem;
@@ -27,7 +28,7 @@
             align-items: center;
             @include montserrat('light');
             cursor: pointer;
-            color: white;
+            color: white !important;
             &:hover {
               opacity: 50%;
             }

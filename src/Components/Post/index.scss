@@ -1,0 +1,102 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+
+  border: 1px solid lightgray;
+  border-radius: 8px;
+
+  padding: 3%;
+
+  @include ibmSans('medium');
+  & hr {
+    @include vanylaHr();
+  }
+
+  &__tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &__buttons {
+      button:first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    &__left {
+      width: 100%;
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      &__category {
+        color: $navbar-color;
+        font-weight: bolder;
+      }
+
+      &__box {
+        display: flex;
+        flex-direction: row;
+
+        &__inner {
+          display: flex;
+          flex-direction: column;
+
+          &__writer {
+            font-weight: bolder;
+          }
+          &__date {
+            color: gray;
+          }
+        }
+
+        &__icon {
+          background-color: #eed7f7;
+          border-radius: 50%;
+          max-width: 2.5rem;
+          max-height: 2.5rem;
+          padding: 0.3rem;
+
+          margin-right: 1rem;
+
+          & img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+
+      &__title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  &__content {
+    &__desc {
+      min-height: 300px;
+    }
+
+    &__file {
+      &__download {
+        & > img {
+          margin: 0 0.5rem 0 2rem;
+        }
+        @include nakedButton();
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

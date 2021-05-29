@@ -1,5 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/database';
+import firebase from '@firebase/app';
+import '@firebase/database';
+import '@firebase/storage';
 
 const ENV = process.env;
 
@@ -13,9 +14,9 @@ const firebaseConfig = {
   measurementId: ENV.REACT_APP_FB_MEASUEMENT_ID,
 };
 
-export default () => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  firebase.database();
-};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+export const database = () => firebase.database();
+export const storage = () => firebase.storage();

@@ -29,13 +29,17 @@ Tab.propTypes = {
     PropTypes.node,
     PropTypes.string,
   ]),
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string,
+  ]),
   subTitle: PropTypes.string,
 };
 
 Tab.defaultProps = {
   children: null,
-  title: '',
+  title: null,
   subTitle: '',
 };
 

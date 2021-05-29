@@ -1,0 +1,31 @@
+.card {
+  @include nakedButton();
+  width: 30%;
+  min-width: 190px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: lightseagreen !important;
+  border: none !important;
+  padding: 2.5%;
+  margin: 1%;
+  color: white;
+  &__title {
+    font-size: 1.3rem;
+    @include ibmSans('bold');
+  }
+  &:hover {
+    animation: buttonHover 0.3s ease;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes buttonHover {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
