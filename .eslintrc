@@ -4,7 +4,8 @@
   "plugins": ["react", "jsx-a11y", "import"],
   "rules": {
     "object-curly-newline": 0,
-    "react/jsx-wrap-multilines": 0
+    "react/jsx-wrap-multilines": 0,
+    "linebreak-style": "off"
   },
   "env": {
     "browser": true
