@@ -6,13 +6,9 @@ function MainTab(props) {
   const { children, title } = props;
   return (
     <div className="mainTab">
-      <div className="mainTab__header">
-        {title}
-      </div>
+      <div className="mainTab__header">{title}</div>
       <hr />
-      <div className="mainTab__content">
-        {children}
-      </div>
+      <div className="mainTab__content">{children}</div>
     </div>
   );
 }
