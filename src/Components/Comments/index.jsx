@@ -24,22 +24,22 @@ function CommentBlock(props) {
           {createdAt}
         </div>
         <br />
+        <div className="commentBlock__buttons">
+          <Button onClick={toggleRemove} size="sm">삭제</Button>
+          <CommentWarnModal
+            mode="remove"
+            isOpen={rmModal}
+            toggle={toggleRemove}
+            confirm={setIsRmConfirm}
+            postId={postId}
+            commentId={commentId}
+          />
+        </div>
       </div>
       <div className="commentBlock__content">
         {content}
       </div>
       <br />
-      <div className="commentBlock__buttons">
-        <Button onClick={toggleRemove} size="sm">삭제</Button>
-        <CommentWarnModal
-          mode="remove"
-          isOpen={rmModal}
-          toggle={toggleRemove}
-          confirm={setIsRmConfirm}
-          postId={postId}
-          commentId={commentId}
-        />
-      </div>
       <hr />
     </div>
   );

@@ -2,11 +2,13 @@
   border: 5px black;
   border-radius: 5px;
 
-  &__buttons {
+  &__author {
     position: relative;
-    left: 725px;
-    button:first-child {
-      margin-right: 1rem;
-    }
+  }
+
+  &__buttons {
+    position: absolute;
+    right :0;
+    top :0;
   }
 }

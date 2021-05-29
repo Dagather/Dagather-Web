@@ -60,6 +60,12 @@ function Post(props) {
     setCommentAuthor(e.target.value);
   };
 
+  const initializeState = () => {
+    setCommentAuthor('');
+    setCommentContent('');
+    setCommentPassword('');
+  };
+
   const parseDate = () => {
     const date = new Date();
     const year = date.getFullYear();
@@ -83,6 +89,7 @@ function Post(props) {
   };
   const sendQuery = async () => {
     pushComment();
+    initializeState();
   };
 
   const isInputValid = () => commentAuthor && commentPassword && commentContent && (commentContent !== '<p><br></p>');
@@ -210,7 +217,7 @@ function Post(props) {
           </div>
           <hr />
           <div className="post__comment">
-            <div className="post__comment_write__tabs">
+            <div className="post__comment__write__tabs">
               <h3>댓글 작성</h3>
             </div>
             <div className="post__comment__data">
@@ -218,9 +225,10 @@ function Post(props) {
               <Input className="post__comment__data__password" type="password" placeholder="비밀번호" value={commentPassword} onChange={commentPwHandler} />
             </div>
             <div className="post__comment__content">
-              <Input className="post__comment__content__input" type="textarea" multiline fullWidth placeholder="댓글을 입력해주세요." name={commentContent} value={commentContent} onChange={commentContentHandler} margin="none" />
+              <Input className="post__comment__content__input" rows="3" type="textarea" multiline placeholder="댓글을 입력해주세요." name={commentContent} value={commentContent} onChange={commentContentHandler} margin="none" />
+              <Button className="post__comment__save" color="success" onClick={successHandler}>작성</Button>
             </div>
-            <Button className="post__comment__save" color="success" onClick={successHandler}>작성</Button>
+            <hr />
             <div className="post__comment__list__tabs">
               <h3>댓글 목록</h3>
             </div>
