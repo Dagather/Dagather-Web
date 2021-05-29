@@ -1,0 +1,14 @@
+.commentBlock {
+  border: 5px black;
+  border-radius: 5px;
+
+  &__author {
+    position: relative;
+  }
+
+  &__buttons {
+    position: absolute;
+    right :0;
+    top :0;
+  }
+}
